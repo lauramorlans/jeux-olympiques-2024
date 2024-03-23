@@ -14,8 +14,6 @@ function App() {
     fetchData();
   }, []);
 
-  console.log('offers:', offers)
-
   return (
     <div className="App">
       <header className="App-header">
