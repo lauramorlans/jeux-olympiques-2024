@@ -4,7 +4,7 @@ export const getOffers = async () => {
   let baseURL = "";
 
   if (process.env.REACT_APP_NODE_ENV === 'production') {
-    baseURL = `${process.env.BACKEND_URL}`;
+    baseURL = `${process.env.REACT_APP_BACKEND_URL}`;
   } else {
     baseURL = "http://localhost:8080";
   }
