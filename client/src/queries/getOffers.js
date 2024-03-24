@@ -19,7 +19,7 @@ export const getOffers = async () => {
     baseURL: baseURL
   });
 
-  const response = await instance.get('/api/offers')
+  const response = await instance.get('/offers')
 
   return response.data;
 }

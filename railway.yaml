@@ -1,8 +1,0 @@
-services:
-  - name: client
-    port: 3000
-    # other configuration for your client service
-
-  - name: server
-    port: 8080
-    # other configuration for your server service
