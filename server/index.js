@@ -2,21 +2,27 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const pgp = require('pg-promise')();
+require('dotenv').config();
 
-// Fake data
-const fakeData = {
-  offerIds: ['1', '2'],
-  offerEntities: {
-    1: { id: 1, name: 'Fake offer 1' },
-    2: { id: 2, name: 'Fake offer 2' },
-  }
-};
+const PGUSER = process.env.PGUSER;
+const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD;
+const RAILWAY_TCP_PROXY_DOMAIN = process.env.RAILWAY_TCP_PROXY_DOMAIN;
+const RAILWAY_TCP_PROXY_PORT = process.env.RAILWAY_TCP_PROXY_PORT;
+const PGDATABASE = process.env.PGDATABASE;
+const db = pgp(`postgresql://${PGUSER}:${POSTGRES_PASSWORD}@${RAILWAY_TCP_PROXY_DOMAIN}:${RAILWAY_TCP_PROXY_PORT}/${PGDATABASE}`)
 
 app.use(cors())
 
-app.get('/offers', (req, res) => {
-  // Sending fake data as JSON response
-  res.json(fakeData);
+// GET /offers endpoint
+app.get('/offers', async (req, res) => {
+  try {
+    const offers = await db.any('SELECT * FROM offers');
+    res.json(offers);
+  } catch (error) {
+    console.error('ERROR:', error);
+    res.status(500).send('Error fetching offers');
+  }
 });
 
 const port = process.env.PORT || 8080;

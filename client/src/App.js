@@ -3,7 +3,7 @@ import { getOffers } from './queries/getOffers';
 import './App.css';
 
 function App() {
-  const [offers, setOffers] = useState({});
+  const [offers, setOffers] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,11 +18,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         Here are the offers:
-        {offers && offers?.offerIds?.map((offerId) => {
-          const offer = offers?.offerEntities[offerId];
+        {offers && offers?.map((offer) => {
           return (
-            <div key={offerId}>
-              {offer?.name}
+            <div key={offer?.id}>
+              {offer?.name} - {offer?.price}
             </div>
           );
         })}
