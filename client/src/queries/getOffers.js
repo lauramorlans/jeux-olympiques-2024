@@ -5,14 +5,14 @@ export const getOffers = async () => {
 
   console.log('process.env.REACT_APP_NODE_ENV:', process.env.REACT_APP_NODE_ENV)
 
-  // Check if running in development mode
-  if (process.env.REACT_APP_NODE_ENV === 'development') {
+  // Check if running in production mode
+  if (process.env.REACT_APP_NODE_ENV === 'production') {
     console.log('1')
-    baseURL = "http://localhost:8080"; // Your local Express server
+    baseURL = `${window.location.protocol}//${window.location.hostname}`;
   } else {
     // Set your production API URL here
     console.log('2')
-    baseURL = `${window.location.protocol}//${window.location.hostname}`;
+    baseURL = "http://localhost:8080"; // Your local Express server
   }
 
   const instance = axios.create({
