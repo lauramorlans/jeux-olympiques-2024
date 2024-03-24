@@ -3,14 +3,17 @@ import axios from "axios";
 export const getOffers = async () => {
   let baseURL = "";
 
+  console.log('process.env.NODE_ENV:', process.env.NODE_ENV)
+
   // Check if running in development mode
   if (process.env.NODE_ENV === "development") {
+    console.log('hey')
     baseURL = "http://localhost:8080";
+  } else {
+    // Set your production API URL here
+    console.log('yo')
+    baseURL = `${window.location.protocol}//${window.location.hostname}`;
   }
-  // else {
-  //   // Set your production API URL here
-  //   baseURL = "https://your-production-api-url.com";
-  // }
 
   const instance = axios.create({
     baseURL: baseURL
