@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Typography, Container, Card, CardContent, Grid } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from "./theme";
 import { getOffers } from './queries/getOffers';
 import './App.css';
+import TopHeader from './components/TopHeader';
 
 function App() {
   const [offers, setOffers] = useState([]);
@@ -15,18 +19,32 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        Here are the offers:
-        {offers && offers?.map((offer) => {
-          return (
-            <div key={offer?.id}>
-              {offer?.name} - {offer?.price}
-            </div>
-          );
-        })}
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <TopHeader />
+      <Container>
+        <Typography variant="h6">
+          Here are the offers:
+        </Typography>
+        <Grid container spacing={3}>
+          {offers && offers?.map((offer) => {
+            return (
+              <Grid item xs={12} sm={6} md={4}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h5" component="div">
+                      {offer?.name}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      {offer?.price} euros
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Container>
+    </ThemeProvider>
   );
 }
 
