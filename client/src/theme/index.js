@@ -14,86 +14,78 @@ export const theme = createTheme({
       default: { main: '#EAEAEA' },
     },
     typography: {
-      fontFamily: 'Inter, Arial, Helvetica, sans-serif, sans-serif',
-      h1: {
-      fontFamily: '\'Plus Jakarta Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif, sans-serif',
-      fontWeight: 700,
-      fontSize: '56px',
-      lineHeight: 1.2
-    },
-    h2: {
-      fontFamily: '\'Plus Jakarta Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif, sans-serif',
-      fontWeight: 700,
-      fontSize: '48px',
-      lineHeight: 1.2
-    },
-    h3: {
-      fontFamily: '\'Plus Jakarta Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif, sans-serif',
-      fontWeight: 700,
-      fontSize: '36px',
-      lineHeight: 1.2
-    },
-    h4: {
-      fontFamily: '\'Plus Jakarta Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif, sans-serif',
-      fontWeight: 700,
-      fontSize: '32px',
-      lineHeight: 1.2
-    },
-    h5: {
-      fontFamily: '\'Plus Jakarta Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif, sans-serif',
-      fontWeight: 700,
-      fontSize: '24px',
-      lineHeight: 1.2
-    },
-    h6: {
-      fontFamily: '\'Plus Jakarta Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif, sans-serif',
-      fontWeight: 700,
-      fontSize: '18px',
-      lineHeight: 1.2
-    },
+      fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     body1: {
-      fontFamily: 'Inter, Arial, Helvetica, sans-serif, sans-serif',
-      fontSize: '14px',
+      fontSize: '1rem',
       fontWeight: 400,
       lineHeight: 1.5
     },
     body2: {
-      fontFamily: 'Inter, Arial, Helvetica, sans-serif, sans-serif',
-      fontSize: '14px',
+      fontSize: '0.875rem',
       fontWeight: 400,
       lineHeight: 1.57
     },
     button: {
-      fontFamily: 'Inter, Arial, Helvetica, sans-serif, sans-serif',
       fontWeight: 600
     },
     caption: {
-      fontFamily: 'Inter, Arial, Helvetica, sans-serif, sans-serif',
-      fontSize: '12px',
-      fontWeight: 600,
-      letterSpacing: '0.5px',
-      lineHeight: 2.5
+      fontSize: '0.75rem',
+      fontWeight: 500,
+      lineHeight: 1.66
     },
     subtitle1: {
-      fontFamily: 'Inter, Arial, Helvetica, sans-serif, sans-serif',
-      fontSize: '16px',
+      fontSize: '1rem',
       fontWeight: 500,
       lineHeight: 1.57
     },
     subtitle2: {
-      fontFamily: 'Inter, Arial, Helvetica, sans-serif, sans-serif',
-      fontSize: '14px',
+      fontSize: '0.875rem',
       fontWeight: 500,
       lineHeight: 1.57
     },
     overline: {
-      fontFamily: 'Inter, Arial, Helvetica, sans-serif, sans-serif',
-      fontSize: '12px',
+      fontSize: '0.75rem',
       fontWeight: 600,
       letterSpacing: '0.5px',
       lineHeight: 2.5,
       textTransform: 'uppercase'
     },
+    h1: {
+      fontFamily: '\'Plus Jakarta Sans\', sans-serif',
+      fontWeight: 700,
+      fontSize: '3.5rem',
+      lineHeight: 1.2
+    },
+    h2: {
+      fontFamily: '\'Plus Jakarta Sans\', sans-serif',
+      fontWeight: 700,
+      fontSize: '3rem',
+      lineHeight: 1.2
+    },
+    h3: {
+      fontFamily: '\'Plus Jakarta Sans\', sans-serif',
+      fontWeight: 700,
+      fontSize: '2.25rem',
+      lineHeight: 1.2
+    },
+    h4: {
+      fontFamily: '\'Plus Jakarta Sans\', sans-serif',
+      fontWeight: 700,
+      fontSize: '2rem',
+      lineHeight: 1.2
+    },
+    h5: {
+      fontFamily: '\'Plus Jakarta Sans\', sans-serif',
+      fontWeight: 700,
+      fontSize: '1.5rem',
+      lineHeight: 1.2
+    },
+    h6: {
+      fontFamily: '\'Plus Jakarta Sans\', sans-serif',
+      fontWeight: 700,
+      fontSize: '1.125rem',
+      lineHeight: 1.2
+    }
     },
     breakpoints: {
       values: {
@@ -137,19 +129,10 @@ export const theme = createTheme({
       },
       MuiIconButton: {
         styleOverrides: {
-          root: {
-            borderRadius: '25%',
-          },
-          colorPrimary: {
-            backgroundColor: '#EAEAEA',
-          },
-          colorSecondary: {
-            backgroundColor: '#ECECEC',
-            borderRadius: '0',
-            borderBottomLeftRadius: '50%',
-            borderTopLeftRadius: '50%',
-          },
-        },
+          sizeSmall: {
+            padding: 4
+          }
+        }
       },
       MuiListItemIcon: {
         styleOverrides: {
@@ -293,22 +276,17 @@ export const theme = createTheme({
         }
       },
       MuiPopover: {
-        styleOverrides: {
-          paper: {
-            borderRadius: '10px',
-          },
-        },
-      },
-      MuiCard: {
+      defaultProps: {
+        elevation: 16
+      }
+    },
+    MuiCard: {
       styleOverrides: {
         root: {
           borderRadius: 20,
           [`&.${paperClasses.elevation1}`]: {
-            boxShadow: 'none' 
-          },
-          [`&.${paperClasses.elevation2}`]: {
-            boxShadow: '0px 5px 22px rgba(0, 0, 0, 0.04), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.03)' 
-          },
+            boxShadow: '0px 5px 22px rgba(0, 0, 0, 0.04), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.03)'
+          }
         }
       }
     },
@@ -343,12 +321,6 @@ export const theme = createTheme({
           justifyContent: 'space-between',
           backgroundImage: 'none',
         },
-        elevation1: {
-          boxShadow: '0px 0px 0px 0.5px rgba(0, 0, 0, 0.03), 0px 5px 22px rgba(0, 0, 0, 0.04)',
-        },
-        elevation8: {
-          boxShadow: '0px 3px 14px rgba(0, 0, 0, 0.08)',
-        }
       }
     },
       MuiSwitch: {
@@ -400,56 +372,31 @@ export const theme = createTheme({
         },
       },
       MuiButton: {
-        styleOverrides: {
-          root: {
-            borderRadius: '12px',
-            textTransform: 'none'
-          },
-          sizeSmall: {
-            padding: '6px 16px'
-          },
-          sizeMedium: {
-            padding: '8px 20px'
-          },
-          sizeLarge: {
-            padding: '11px 24px'
-          },
-          textSizeSmall: {
-            padding: '7px 12px'
-          },
-          textSizeMedium: {
-            padding: '9px 16px'
-          },
-          textSizeLarge: {
-            padding: '12px 16px'
-          },
-          outlinedSecondary: {
-            background: 'white',
-            border: `1px solid ${palette.primary}`,
-            borderRadius: '12px',
-            color: palette.primary,
-            '&:hover': {
-              background: 'rgba(99, 102, 241, 0.04)',
-              border: '1px solid rgba(99, 102, 241, 0.5)',
-            },
-            '&:disabled': {
-              border: '1px solid rgba(17, 25, 39, 0.12)',
-            },
-          },
-          containedPrimary: {
-            background: palette.primary,
-            boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.08)',
-            borderRadius: '12px',
-            color: 'white',
-            '&:hover': {
-              background: '#4338CA',
-            },
-            '&:disabled': {
-              background: 'rgba(17, 25, 39, 0.12)',
-            },
-          },
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+          textTransform: 'none'
+        },
+        sizeSmall: {
+          padding: '6px 16px'
+        },
+        sizeMedium: {
+          padding: '8px 20px'
+        },
+        sizeLarge: {
+          padding: '11px 24px'
+        },
+        textSizeSmall: {
+          padding: '7px 12px'
+        },
+        textSizeMedium: {
+          padding: '9px 16px'
+        },
+        textSizeLarge: {
+          padding: '12px 16px'
         }
-      },
+      }
+    },
       MuiBadge: {
         styleOverrides: {
           badge: {
