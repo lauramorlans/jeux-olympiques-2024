@@ -19,32 +19,34 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <TopHeader />
-      <Container>
-        <Typography variant="h6">
-          Here are the offers:
-        </Typography>
-        <Grid container spacing={3}>
-          {offers && offers?.map((offer) => {
-            return (
-              <Grid item xs={12} sm={6} md={4}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      {offer?.name}
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      {offer?.price} euros
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Container>
-    </ThemeProvider>
+    <React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <TopHeader />
+        <Container>
+          <Typography variant="h6">
+            Here are the offers:
+          </Typography>
+          <Grid container spacing={3}>
+            {offers && offers?.map((offer) => {
+              return (
+                <Grid item xs={12} sm={6} md={4}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {offer?.name}
+                      </Typography>
+                      <Typography variant="body2" component="p">
+                        {offer?.price} euros
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Container>
+      </ThemeProvider>
+    </React.StrictMode>
   );
 }
 
