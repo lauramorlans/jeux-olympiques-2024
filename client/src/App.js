@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Container, Card, CardContent, Grid } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from "./theme";
 import { getOffers } from './queries/getOffers';
 import './App.css';
 import TopHeader from './components/TopHeader';
@@ -18,6 +20,7 @@ function App() {
 
   return (
     <React.StrictMode>
+      <ThemeProvider theme={theme}>
         <TopHeader />
         <Container>
           <Typography variant="h6">
@@ -42,6 +45,7 @@ function App() {
             })}
           </Grid>
         </Container>
+      </ThemeProvider>
     </React.StrictMode>
   );
 }
