@@ -1,11 +1,14 @@
 import React from 'react';
-import TopHeader from '../TopHeader';
+import { Container } from '@mui/material';
+import Navigation from '../Navigation';
 
 const MainLayout = (props) => {
   return (
     <React.Fragment>
-      <TopHeader />
-      {props.children}
+      <Navigation />
+      <Container maxWidth="xl" sx={{ mt: 5 }}>
+        {props.children}
+      </Container>
     </React.Fragment>
   );
 };
