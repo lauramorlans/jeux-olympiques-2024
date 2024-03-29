@@ -17,7 +17,7 @@ const PGDATABASE = process.env.PGDATABASE;
 const db = pgp(`postgresql://${PGUSER}:${POSTGRES_PASSWORD}@${RAILWAY_TCP_PROXY_DOMAIN}:${RAILWAY_TCP_PROXY_PORT}/${PGDATABASE}`)
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://jeux-olympiques-2024-production.up.railway.app'],
   credentials: true // Enable credentials (cookies) in CORS
 };
 
