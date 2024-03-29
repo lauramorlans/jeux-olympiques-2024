@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getOffers = async () => {
+export const instance = () => {
   let baseURL = "";
 
   if (process.env.REACT_APP_NODE_ENV === 'production') {
@@ -10,10 +10,9 @@ export const getOffers = async () => {
   }
 
   const instance = axios.create({
-    baseURL: baseURL
+    baseURL: baseURL,
+    withCredentials: true,
   });
 
-  const response = await instance.get('/offers')
-
-  return response.data;
+  return instance;
 }

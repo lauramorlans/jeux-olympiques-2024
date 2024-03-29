@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { AppBar, Button, IconButton, Typography, Drawer, List, ListItem, ListItemText, Hidden, Box, Popover, Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppBar, Button, IconButton, Typography, Drawer, List, ListItemButton, ListItemText, Hidden, Box, Popover, Paper } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { logout } from '../../axios/logout';
 
 const TopHeader = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const user = useSelector(state => state.user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -28,15 +36,15 @@ const TopHeader = () => {
   const accountMenuItems = [
     { text: 'Profile', link: '/profile' },
     { text: 'Settings', link: '/settings' },
-    { text: 'Logout', link: '/logout' },
+    { text: 'Logout', onClick: () => { dispatch(logout()); navigate('/login') } },
   ];
 
   const renderMenuItems = (items) => (
     <List>
       {items.map((item, index) => (
-        <ListItem button key={index}>
+        <ListItemButton key={index} onClick={item.onClick}>
           <ListItemText primary={item.text} />
-        </ListItem>
+        </ListItemButton>
       ))}
     </List>
   );
@@ -73,38 +81,42 @@ const TopHeader = () => {
                 </Button>
               ))}
           </Hidden>
-          <Hidden smDown>
-            <IconButton color="inherit" aria-label="account" onClick={handleAccountButtonClick}>
-              <AccountCircleIcon />
-            </IconButton>
-            <Popover
-              open={Boolean(anchorEl)}
-              anchorEl={anchorEl}
-              onClose={handleClosePopover}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <Paper>
-                {renderMenuItems(accountMenuItems)}
-              </Paper>
-            </Popover>
-          </Hidden>
+          {user?.id && (
+            <Hidden smDown>
+              <IconButton color="inherit" aria-label="account" onClick={handleAccountButtonClick}>
+                <AccountCircleIcon />
+              </IconButton>
+              <Popover
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={handleClosePopover}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <Paper>
+                  {renderMenuItems(accountMenuItems)}
+                </Paper>
+              </Popover>
+            </Hidden>
+          )}
         </Box>
       </AppBar>
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
         {renderMenuItems(menuItems)}
-        <List>
-          <ListItem button>
-            <ListItemText primary="Account" />
-          </ListItem>
-          {renderMenuItems(accountMenuItems)}
-        </List>
+        {user?.id && (
+          <List>
+            <ListItemButton>
+              <ListItemText primary="Account" />
+            </ListItemButton>
+            {renderMenuItems(accountMenuItems)}
+          </List>
+        )}
       </Drawer>
     </React.Fragment>
   );
