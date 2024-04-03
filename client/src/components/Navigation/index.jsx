@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Stack, IconButton, Drawer, List, ListItemButton, ListItemText, Box, Popover, Paper, Button } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Email, Info, Home, Menu, ConfirmationNumber } from '@mui/icons-material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Email, Info, Home, Menu, ConfirmationNumber, AccountCircle } from '@mui/icons-material';
 import { neutral, purple } from '../../theme/colors'; 
 import { logout } from '../../axios/logout';
 import logo from './logo.svg';
@@ -99,7 +98,7 @@ const Navigation = () => {
         </Button>
         <img src={logo} alt="logo" style={{ width: '40px' }} />
         <IconButton color="inherit" aria-label="account" onClick={handleAccountButtonClick}>
-          <AccountCircleIcon />
+          <AccountCircle />
         </IconButton>
         <Popover
           open={Boolean(anchorEl)}
