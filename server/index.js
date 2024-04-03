@@ -104,9 +104,7 @@ app.post('/login', async (req, res, next) => {
         // in the session store to be retrieved,
         // or in this case the entire user object
         req.session.user = user;
-        req.session.success = 'Authenticated as ' + user.email;
-        console.log('req.session login:', req.session)
-        res.status(200).send({ status: "success", message: req.session.success });
+        res.status(200).send(user);
       });
     } else {
       req.session.error = 'Authentication failed, please check your email and password.';
@@ -117,7 +115,6 @@ app.post('/login', async (req, res, next) => {
 
 app.get('/user', async (req, res) => {
   // Check if session contains user data
-  console.log('req.session user:', req.session)
   if (req.session && req.session.user) {
     try {
       const userId = req.session.user.id; // Assuming id is the primary key of the user table

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -15,9 +16,18 @@ import {
 import { signIn } from '../axios/signIn';
 
 function LoginPage() {
+    const user = useSelector(state => state.user);
+
     const [loginError, setLoginError] = useState(null);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+    if (user?.id) {
+        navigate('/account');
+    }
+  }, [user, navigate]);
 
   const initialValues = {
     email: 'admin@test.com',
@@ -42,8 +52,9 @@ function LoginPage() {
     validationSchema,
     onSubmit: async (values, helpers) => {
         try {
-            await signIn(values.email, values.password);
-            navigate('/dashboard');
+            dispatch(signIn(values.email, values.password)).then(() => {
+                navigate('/account');
+            });
             } catch (err) {
             if (err.response) {
                 setLoginError(err.response.data.message);
@@ -62,17 +73,17 @@ function LoginPage() {
                 color="text.secondary"
                 variant="body2"
                 >
-                Don&apos;t have an account?
+                Pas encore de compte ?
                 &nbsp;
                 <Link
                     to="/register"
                 >
-                    Register
+                    Créer un compte
                 </Link>
                 </Typography>
             )}
             sx={{ pb: 0 }}
-            title="Log in"
+            title="Connexion"
         />
         <CardContent>
             <form
@@ -93,7 +104,7 @@ function LoginPage() {
                         error={!!(formik.touched.email && formik.errors.email)}
                         fullWidth
                         helperText={formik.touched.email && formik.errors.email}
-                        label="Email Address"
+                        label="Adresse mail"
                         name="email"
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
@@ -104,7 +115,7 @@ function LoginPage() {
                         error={!!(formik.touched.password && formik.errors.password)}
                         fullWidth
                         helperText={formik.touched.password && formik.errors.password}
-                        label="Password"
+                        label="Mot de passe"
                         name="password"
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
@@ -128,7 +139,7 @@ function LoginPage() {
                     type="submit"
                     variant="contained"
                 >
-                    Log In
+                    Connexion
                 </Button>
             </form>
         </CardContent>

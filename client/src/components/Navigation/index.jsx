@@ -38,13 +38,13 @@ const Navigation = () => {
   ];
 
   const accountMenuItems = [
-    { text: 'Profil', link: '/profile' },
+    { text: 'Mon compte', onClick: () => { handleClosePopover(); navigate('/account') } },
     { text: 'Paramètres', link: '/settings' },
-    { text: 'Déconnexion', onClick: () => { dispatch(logout()); navigate('/login'); setDrawerOpen(false) } },
+    { text: 'Déconnexion', onClick: () => { handleClosePopover(); dispatch(logout()).then(() => { navigate('/login'); }); } },
   ];
 
   const loginMenuItems = [
-    { text: 'Connexion', onClick: () => { navigate('/login'); setDrawerOpen(false) } },
+    { text: 'Connexion', onClick: () => { handleClosePopover(); navigate('/login') } },
     { text: 'Créer un compte', link: '/register' },
   ];
 

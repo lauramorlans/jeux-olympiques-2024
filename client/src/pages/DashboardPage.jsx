@@ -15,7 +15,7 @@ function DashboardPage() {
   return (
     <Container>
         <Typography variant="h6">
-            Hello, {user?.name}
+            Bienvenue dans votre espace administration, {user?.name}
         </Typography>
     </Container>
   );
