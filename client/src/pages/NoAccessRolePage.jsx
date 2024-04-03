@@ -6,7 +6,7 @@ function NoAccessRolePage() {
   return (
     <Container>
         <Typography variant="h6">
-          La page que vous essayez d'accéder ne vous est pas accessible.
+          {'La page que vous essayez d\'accéder ne vous est pas accessible.'}
         </Typography>
         <Link
           to="/"

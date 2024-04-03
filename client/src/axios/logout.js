@@ -1,6 +1,6 @@
 import { instance } from './utils';
 
-export const unsetUser = (userData) => ({
+export const unsetUser = () => ({
   type: 'UNSET_USER',
 });
 

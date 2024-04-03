@@ -50,7 +50,7 @@ function LoginPage() {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values, helpers) => {
+    onSubmit: async (values) => {
         try {
             dispatch(signIn(values.email, values.password)).then(() => {
                 navigate('/account');

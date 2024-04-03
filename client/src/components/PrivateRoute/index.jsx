@@ -27,21 +27,25 @@ function PrivateRoute(props) {
 
   if (!loading) {
     if ((isLoggedIn || isAdmin) && !user?.id) {
-    render = (<Navigate
-        to="/no-access-login"
-        state={{ from: location.pathname }}
-        replace
-    />);
-  } else if (isAdmin && user?.role !== 'admin') {
-    render = (<Navigate
-        to="/no-access-role"
-        state={{ from: location.pathname }}
-        replace
-    />);
-  } else {
-    render = (
-      <Outlet />
-    );
+      render = (
+        <Navigate
+          to="/no-access-login"
+          state={{ from: location.pathname }}
+          replace
+        />
+      );
+    } else if (isAdmin && user?.role !== 'admin') {
+      render = (
+        <Navigate
+          to="/no-access-role"
+          state={{ from: location.pathname }}
+          replace
+        />
+      );
+    } else {
+      render = (
+        <Outlet />
+      );
     }
   }
 

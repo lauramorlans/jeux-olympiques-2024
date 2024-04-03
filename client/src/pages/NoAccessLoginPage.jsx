@@ -6,7 +6,7 @@ function NoAccessLoginPage() {
   return (
     <Container>
         <Typography variant="h6">
-          La page que vous essayez d'accéder a besoin d'un compte. Veuillez vous connecter.
+          {'La page que vous essayez d\'accéder a besoin d\'un compte. Veuillez vous connecter.'}
         </Typography>
         <Link
           to="/login"
