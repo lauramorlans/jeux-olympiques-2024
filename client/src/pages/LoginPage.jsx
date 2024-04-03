@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import {
+    Box,
     Container,
     CardHeader,
     Typography,
@@ -13,6 +14,7 @@ import {
     TextField,
     FormHelperText,
     Button,
+    useMediaQuery,
 } from '@mui/material';
 import { signIn } from '../axios/signIn';
 
@@ -23,6 +25,7 @@ function LoginPage() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
     useEffect(() => {
     if (user?.id) {
@@ -67,86 +70,91 @@ function LoginPage() {
   });
 
   return (
-    <Container maxWidth="sm">
-        <Card elevation={16} sx={{ marginTop: 5 }}>
-            <CardHeader
-                subheader={(
-                    <Typography
-                    color="text.secondary"
-                    variant="body2"
-                    >
-                    Pas encore de compte ?
-                    &nbsp;
-                    <Link
-                        to="/register"
-                    >
-                        Créer un compte
-                    </Link>
-                    </Typography>
-                )}
-                sx={{ pb: 0 }}
-                title="Connexion"
-            />
-            <CardContent>
-                <form
-                    noValidate
-                    onSubmit={formik.handleSubmit}
-                >
-                    <Stack spacing={3}>
-                        {loginError && (
-                        <FormHelperText
-                            error
-                            sx={{ mt: 3 }}
+    <Box sx={{ padding: isMobile ? 4 : 12, backgroundColor: '#111111' }}>
+        <Typography variant="h5" sx={{ textAlign: 'center', marginBottom: 6, color: 'white' }}>
+          {'Accédez à l\'épicentre de l\'excitation olympique en créant un compte ou en vous connectant dès maintenant, et réservez vos tickets pour vivre l\'intensité des Jeux Olympiques comme jamais auparavant !'}
+        </Typography>
+        <Container maxWidth="sm">
+            <Card elevation={16}>
+                <CardHeader
+                    subheader={(
+                        <Typography
+                        color="text.secondary"
+                        variant="body2"
                         >
-                            {loginError}
-                        </FormHelperText>
-                    )}
-                        <TextField
-                            autoFocus
-                            error={!!(formik.touched.email && formik.errors.email)}
-                            fullWidth
-                            helperText={formik.touched.email && formik.errors.email}
-                            label="Adresse mail"
-                            name="email"
-                            onBlur={formik.handleBlur}
-                            onChange={formik.handleChange}
-                            type="email"
-                            value={formik.values.email}
-                        />
-                        <TextField
-                            error={!!(formik.touched.password && formik.errors.password)}
-                            fullWidth
-                            helperText={formik.touched.password && formik.errors.password}
-                            label="Mot de passe"
-                            name="password"
-                            onBlur={formik.handleBlur}
-                            onChange={formik.handleChange}
-                            type="password"
-                            value={formik.values.password}
-                        />
-                    </Stack>
-                    {formik.errors.submit && (
-                        <FormHelperText
-                            error
-                            sx={{ mt: 3 }}
+                        Pas encore de compte ?
+                        &nbsp;
+                        <Link
+                            to="/register"
                         >
-                            {formik.errors.submit}
-                        </FormHelperText>
+                            Créer un compte
+                        </Link>
+                        </Typography>
                     )}
-                    <Button
-                        disabled={formik.isSubmitting}
-                        fullWidth
-                        size="large"
-                        sx={{ mt: 2 }}
-                        type="submit"
-                        variant="contained"
+                    sx={{ pb: 0 }}
+                    title="Connexion"
+                />
+                <CardContent>
+                    <form
+                        noValidate
+                        onSubmit={formik.handleSubmit}
                     >
-                        Connexion
-                    </Button>
-                </form>
-            </CardContent>
-        </Card>
-    </Container>
+                        <Stack spacing={3}>
+                            {loginError && (
+                            <FormHelperText
+                                error
+                                sx={{ mt: 3 }}
+                            >
+                                {loginError}
+                            </FormHelperText>
+                        )}
+                            <TextField
+                                autoFocus
+                                error={!!(formik.touched.email && formik.errors.email)}
+                                fullWidth
+                                helperText={formik.touched.email && formik.errors.email}
+                                label="Adresse mail"
+                                name="email"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                type="email"
+                                value={formik.values.email}
+                            />
+                            <TextField
+                                error={!!(formik.touched.password && formik.errors.password)}
+                                fullWidth
+                                helperText={formik.touched.password && formik.errors.password}
+                                label="Mot de passe"
+                                name="password"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                type="password"
+                                value={formik.values.password}
+                            />
+                        </Stack>
+                        {formik.errors.submit && (
+                            <FormHelperText
+                                error
+                                sx={{ mt: 3 }}
+                            >
+                                {formik.errors.submit}
+                            </FormHelperText>
+                        )}
+                        <Button
+                            disabled={formik.isSubmitting}
+                            fullWidth
+                            size="large"
+                            sx={{ mt: 2 }}
+                            type="submit"
+                            variant="contained"
+                        >
+                            Connexion
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
+        </Container>
+    </Box>
   );
 }
 

@@ -36,15 +36,18 @@ function HomePage() {
   return (
     <Box>
         <div style={{ position: "relative" }}>
-            <CardMedia style={{ width: '100%', marginBottom: '20px', borderBottomLeftRadius: '7rem' }} component="img" image={olympic} title="Jeux Olympiques" alt="Sprint"/> 
+            <CardMedia style={{ width: '100%', marginBottom: '20px', borderBottomRightRadius: '7rem' }} component="img" image={olympic} title="Jeux Olympiques" alt="Sprint"/> 
             <div style={{ position: "absolute", color: "white", top: 10, left: "10%" }}><Typography variant="h1" sx={{ fontSize: '20vw' }}>Paris 2024</Typography></div>
         </div>
-        <Container maxWidth="lg">
-            <Box sx={{ marginTop: 6 }}>
-                <Typography variant="h4" sx={{ textAlign: 'center' }}>
+        <Box sx={{ marginTop: 6 }}>
+            <Container maxWidth="lg">
+                <Typography variant="h3" sx={{ textAlign: 'center' }}>
                     Les épreuves phares
                 </Typography>
-                <Grid container spacing={5} justifyContent="center" sx={{ marginTop: 1 }}>
+                <Typography variant="h5" sx={{ textAlign: 'center', marginBottom: 6, marginTop: 6 }}>
+                    {'Explorez les épreuves légendaires des Jeux Olympiques, où la virtuosité athlétique rencontre l\'excellence technique pour créer des moments de pure magie sportive'}
+                </Typography>
+                <Grid container spacing={5} justifyContent="center">
                     {mainEvents.map((event, index) => {
                         return (
                             <Grid item xs={12} sm={6} md={4} key={index}>
@@ -68,15 +71,20 @@ function HomePage() {
                         );
                     })}
                 </Grid>
-            </Box>
-            <Box sx={{ marginTop: 6 }}>
-                <Typography variant="h4" sx={{ textAlign: 'center' }}>
+            </Container>
+        </Box>
+        <Box sx={{ marginTop: 6, backgroundColor: '#111111' }}>
+            <Container maxWidth="lg" sx={{ padding: 6 }}>
+                <Typography variant="h3" sx={{ textAlign: 'center', color: 'white' }}>
                     Découvrez notre billeterie
                 </Typography>
-                <Grid container spacing={5} justifyContent="center" sx={{ marginTop: 1 }}>
+                <Typography variant="h5" sx={{ textAlign: 'center', marginBottom: 6, marginTop: 6, color: 'white' }}>
+                    {'Explorez une diversité de billets pour les Jeux Olympiques, vous permettant d\'accéder à une multitude d\'événements passionnants et de vivre l\'excitation du sport mondial en direct'}
+                </Typography>
+                <Grid container spacing={5} justifyContent="center">
                     {offers && offers?.map((offer) => {
                         return (
-                            <Grid item xs={12} sm={6} md={4} key={offer?.id}>
+                            <Grid item xs={12} sm={3} key={offer?.id}>
                                 <Card>
                                     <CardContent>
                                         <Typography variant="h5" component="div">
@@ -91,11 +99,11 @@ function HomePage() {
                         );
                     })}
                 </Grid>
-                <Box sx={{ display: 'flex', justifyContent: 'center',  marginTop: 6 }}>
-                    <Button variant="outlined" onClick={() => {}}>Réserver</Button>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 6 }}>
+                    <Button variant="contained" onClick={() => {}}>Réserver</Button>
                 </Box>
-            </Box>
-        </Container>
+            </Container>
+        </Box>
     </Box>
   );
 }

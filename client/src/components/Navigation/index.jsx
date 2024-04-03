@@ -6,7 +6,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { Email, Info, Home, Menu, ConfirmationNumber, AccountCircle } from '@mui/icons-material';
 import { neutral, purple } from '../../theme/colors'; 
 import { logout } from '../../axios/logout';
-import logo from './logo.svg';
+import logo from './logo.png';
 
 const Navigation = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -90,15 +90,18 @@ const Navigation = () => {
       >
         <Button
           variant="outlined"
+          color="secondary"
           startIcon={<Menu />}
           onClick={toggleDrawer}
           sx={{ p: 0, border: 'none', '&:hover': { border: 'none' } }}
         >
           Menu
         </Button>
-        <img src={logo} alt="logo" style={{ width: '40px' }} />
+        <div onClick={() => navigate('/')}>
+          <img src={logo} alt="logo" style={{ width: '40px', cursor: 'pointer' }} />
+        </div>
         <IconButton color="inherit" aria-label="account" onClick={handleAccountButtonClick}>
-          <AccountCircle />
+          <AccountCircle color="secondary" />
         </IconButton>
         <Popover
           open={Boolean(anchorEl)}
@@ -125,7 +128,7 @@ const Navigation = () => {
       onClose={toggleDrawer}
       PaperProps={{
           sx: {
-            '--nav-bg': neutral[800],
+            '--nav-bg': '#111111',
             '--nav-color': theme.palette.common.white,
             '--nav-border-color': 'transparent',
             '--nav-logo-border': purple.main,
