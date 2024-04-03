@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Stack, IconButton, Drawer, List, ListItemButton, ListItemText, Box, Popover, Paper, useMediaQuery, Typography } from '@mui/material';
+import { Stack, IconButton, Drawer, List, ListItemButton, ListItemText, Box, Popover, Paper, Button } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Email, Info, Home, Menu, ConfirmationNumber } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { neutral, purple } from '../../theme/colors'; 
 import { logout } from '../../axios/logout';
+import logo from './logo.svg';
 
 const Navigation = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -17,7 +18,6 @@ const Navigation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -32,9 +32,10 @@ const Navigation = () => {
   };
 
   const menuItems = [
-    { text: 'Accueil', onClick: () => { navigate('/'); setDrawerOpen(false) } },
-    { text: 'À propos', link: '/about' },
-    { text: 'Contact', link: '/contact' },
+    { text: 'Accueil', onClick: () => { navigate('/'); setDrawerOpen(false) }, icon: <Home /> },
+    { text: 'Billeterie', link: '/tickets', icon: <ConfirmationNumber /> },
+    { text: 'À propos', link: '/about', icon: <Info /> },
+    { text: 'Contact', link: '/contact', icon: <Email /> },
   ];
 
   const accountMenuItems = [
@@ -52,6 +53,9 @@ const Navigation = () => {
     <List>
       {items.map((item, index) => (
         <ListItemButton key={index} onClick={item.onClick}>
+          {item?.icon && (
+            <Box sx={{ marginRight: '1em' }}>{item?.icon}</Box>
+          )}
           <ListItemText primary={item.text} />
         </ListItemButton>
       ))}
@@ -80,60 +84,20 @@ const Navigation = () => {
         alignItems="center"
         direction="row"
         justifyContent="space-between"
-        spacing={2}
         sx={{
-          minHeight: '50px',
+          height: '50px',
           px: 2
         }}
       >
-        <Stack
-          alignItems="center"
-          direction="row"
+        <Button
+          variant="outlined"
+          startIcon={<Menu />}
+          onClick={toggleDrawer}
+          sx={{ p: 0, border: 'none', '&:hover': { border: 'none' } }}
         >
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={toggleDrawer}
-            >
-              <MenuIcon />
-            </IconButton>
-            {!isMobile && (
-              <Typography variant="h6">
-                Menu
-              </Typography>
-            )}
-        </Stack>
-        <Stack
-          alignItems="center"
-          direction="row"
-          spacing={1}
-        >
-          <Stack
-            alignItems="center"
-            direction="row"
-            display="inline-flex"
-            spacing={1}
-            sx={{ textDecoration: 'none' }}
-          >
-            <Box
-              sx={{
-                color: 'text.primary',
-                fontFamily: '\'Plus Jakarta Sans\', sans-serif',
-                fontSize: 14,
-                fontWeight: 800,
-                letterSpacing: '0.3px',
-                lineHeight: 2.5,
-                '& span': {
-                  color: 'primary.main'
-                }
-              }}
-            >
-              Paris <span>2024</span>
-            </Box>
-          </Stack>
-        </Stack>
+          Menu
+        </Button>
+        <img src={logo} alt="logo" style={{ width: '40px' }} />
         <IconButton color="inherit" aria-label="account" onClick={handleAccountButtonClick}>
           <AccountCircleIcon />
         </IconButton>
