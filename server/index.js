@@ -53,8 +53,8 @@ app.use(function(req, res, next){
   next();
 });
 
-async function authenticate (email, password, fn) {
-  const users = await db.any('SELECT * FROM users WHERE email = $1', [email]);
+async function authenticate (username, password, fn) {
+  const users = await db.any('SELECT * FROM users WHERE username = $1', [username]);
 
   if (users.length === 0) {
     // User not found
@@ -73,28 +73,15 @@ async function authenticate (email, password, fn) {
   }
 }
 
-// function restrict(req, res, next) {
-//   if (req.session.user) {
-//     next();
-//   } else {
-//     req.session.error = 'Access denied!';
-//     res.redirect('/login');
-//   }
-// }
-
-// app.get('/restricted', restrict, function(req, res){
-//   res.send('Wahoo! restricted area, click to <a href="/logout">logout</a>');
-// });
-
 app.get('/logout', function(req, res){
   // destroy the user's session to log them out
   // will be re-created next request
   req.session.destroy();
-  res.status(200).send({ status: "success", message: 'Logged out' });
+  res.status(200).send({ status: "success", message: 'Déconnecté' });
 });
 
 app.post('/login', async (req, res, next) => {
-  await authenticate(req.body.email, req.body.password, function(err, user){
+  await authenticate(req.body.username, req.body.password, function(err, user){
     if (err) return next(err)
     if (user) {
       // Regenerate session when signing in
@@ -107,7 +94,7 @@ app.post('/login', async (req, res, next) => {
         res.status(200).send(user);
       });
     } else {
-      req.session.error = 'Authentication failed, please check your email and password.';
+      req.session.error = 'Erreur de connexion, merci de vérifier votre nom d\'utilisateur et mot de passe.';
       res.status(401).send({ status: "error", message: req.session.error });
     }
   });
@@ -126,7 +113,7 @@ app.get('/user', async (req, res) => {
     }
   } else {
     // Session not authenticated
-    res.status(401).send('Unauthorized');
+    res.status(401).send('Non autorisé');
   }
 });
 

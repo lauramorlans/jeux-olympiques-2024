@@ -9,13 +9,13 @@ function AccountPage() {
   return (
     <Container>
         <Typography variant="h6">
-            Bienvenue, {user?.name}
+          Bienvenue, {user?.username}
         </Typography>
         {user?.role === 'admin' && (
           <Link
               to="/dashboard"
           >
-              Espace Admin
+            Espace Admin
           </Link>
         )}
     </Container>

@@ -16,6 +16,7 @@ import sprint from '../images/sprint.jpg';
 import pool from '../images/pool.jpg';
 
 function HomePage() {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
@@ -36,8 +37,12 @@ function HomePage() {
   return (
     <Box>
         <div style={{ position: "relative" }}>
-            <CardMedia style={{ width: '100%', marginBottom: '20px', borderBottomRightRadius: '7rem' }} component="img" image={olympic} title="Jeux Olympiques" alt="Sprint"/> 
-            <div style={{ position: "absolute", color: "white", top: 10, left: "10%" }}><Typography variant="h1" sx={{ fontSize: '20vw' }}>Paris 2024</Typography></div>
+            <CardMedia style={{ width: '100%', marginBottom: '20px', borderBottomRightRadius: '7rem' }} component="img" image={olympic} title="Jeux Olympiques" alt="Sprint" onLoad={() => setImageLoaded(true)} /> 
+            {imageLoaded && (
+                <div style={{ position: "absolute", color: "white", top: 10, left: "10%" }}>
+                <Typography variant="h1" sx={{ fontSize: '20vw' }}>Paris 2024</Typography>
+                </div>
+            )}
         </div>
         <Box sx={{ marginTop: 6 }}>
             <Container maxWidth="lg">
@@ -91,7 +96,7 @@ function HomePage() {
                                             {offer?.name}
                                         </Typography>
                                         <Typography variant="body2" component="p">
-                                            {offer?.price}€ - {offer?.includedtickets} personne(s)
+                                            {offer?.price}€ - {offer?.includedtickets} personne{offer?.includedtickets === 1 ? '' : 's'}
                                         </Typography>
                                     </CardContent>
                                 </Card>

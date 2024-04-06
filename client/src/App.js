@@ -8,7 +8,10 @@ import PrivateRoute from './components/PrivateRoute'
 import AccountPage from './pages/AccountPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import AboutPage from './pages/AboutPage'
 import DashboardPage from './pages/DashboardPage'
+import TicketsPage from './pages/TicketsPage'
+import RegisterPage from './pages/RegisterPage'
 import NoAccessLoginPage from './pages/NoAccessLoginPage'
 import NoAccessRolePage from './pages/NoAccessRolePage'
 import store from './redux/store'
@@ -29,6 +32,9 @@ function App() {
                 <Route path="/dashboard" element={<DashboardPage />} />
               </Route>
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/tickets" element={<TicketsPage />} />
               <Route path="/no-access-login" element={<NoAccessLoginPage />} />
               <Route path="/no-access-role" element={<NoAccessRolePage />} />
             </Routes>

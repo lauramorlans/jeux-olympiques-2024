@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { signIn } from '../axios/signIn';
 
-function LoginPage() {
+function RegisterPage() {
     const user = useSelector(state => state.user);
 
     const [loginError, setLoginError] = useState(null);
@@ -153,4 +153,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

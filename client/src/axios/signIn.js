@@ -5,14 +5,13 @@ export const setUser = (userData) => ({
   payload: userData,
 });
 
-export const signIn = (email, password) => {
+export const signIn = (username, password) => {
   return async (dispatch) => {
     try {
-      const response = await instance().post('/login', { email, password });
+      const response = await instance().post('/login', { username, password });
       dispatch(setUser(response.data));
     } catch (error) {
-      // Handle error
-      console.error('Error log in:', error);
+      return error?.response?.data?.message || 'Une erreur est apparue.';
     }
   };
 };

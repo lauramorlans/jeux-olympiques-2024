@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Stack, IconButton, Drawer, List, ListItemButton, ListItemText, Box, Popover, Paper, Button } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Email, Info, Home, Menu, ConfirmationNumber, AccountCircle } from '@mui/icons-material';
+import { ShoppingBasket, Info, Home, Menu, ConfirmationNumber, AccountCircle } from '@mui/icons-material';
 import { neutral, purple } from '../../theme/colors'; 
 import { logout } from '../../axios/logout';
 import logo from './logo.png';
@@ -32,20 +32,18 @@ const Navigation = () => {
 
   const menuItems = [
     { text: 'Accueil', onClick: () => { navigate('/'); setDrawerOpen(false) }, icon: <Home /> },
-    { text: 'Billeterie', link: '/tickets', icon: <ConfirmationNumber /> },
-    { text: 'À propos', link: '/about', icon: <Info /> },
-    { text: 'Contact', link: '/contact', icon: <Email /> },
+    { text: 'Billeterie', onClick: () => { navigate('/tickets'); setDrawerOpen(false) }, icon: <ConfirmationNumber /> },
+    { text: 'À propos', onClick: () => { navigate('/about'); setDrawerOpen(false) }, icon: <Info /> },
   ];
 
   const accountMenuItems = [
     { text: 'Mon compte', onClick: () => { handleClosePopover(); navigate('/account') } },
-    { text: 'Paramètres', link: '/settings' },
     { text: 'Déconnexion', onClick: () => { handleClosePopover(); dispatch(logout()).then(() => { navigate('/login'); }); } },
   ];
 
   const loginMenuItems = [
     { text: 'Connexion', onClick: () => { handleClosePopover(); navigate('/login') } },
-    { text: 'Créer un compte', link: '/register' },
+    { text: 'Créer un compte', onClick: () => { handleClosePopover(); navigate('/register') } },
   ];
 
   const renderMenuItems = (items) => (
@@ -100,9 +98,14 @@ const Navigation = () => {
         <div onClick={() => navigate('/')}>
           <img src={logo} alt="logo" style={{ width: '40px', cursor: 'pointer' }} />
         </div>
-        <IconButton color="inherit" aria-label="account" onClick={handleAccountButtonClick}>
-          <AccountCircle color="secondary" />
-        </IconButton>
+        <div>
+          <IconButton color="inherit" aria-label="basket" onClick={() => navigate('/basket')}>
+            <ShoppingBasket color="secondary" />
+          </IconButton>
+          <IconButton color="inherit" aria-label="account" onClick={handleAccountButtonClick}>
+            <AccountCircle color="secondary" />
+          </IconButton>
+        </div>
         <Popover
           open={Boolean(anchorEl)}
           anchorEl={anchorEl}
