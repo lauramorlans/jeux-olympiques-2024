@@ -7,8 +7,6 @@ const pgp = require('pg-promise')();
 const app = express();
 require('dotenv').config();
 
-// const saltRounds = 10;
-
 const PGUSER = process.env.PGUSER;
 const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD;
 const RAILWAY_TCP_PROXY_DOMAIN = process.env.RAILWAY_TCP_PROXY_DOMAIN;
@@ -20,6 +18,8 @@ const corsOptions = {
   origin: ['http://localhost:3000', 'https://jeux-olympiques-2024-production.up.railway.app'],
   credentials: true // Enable credentials (cookies) in CORS
 };
+
+const saltRounds = 10;
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -98,6 +98,23 @@ app.post('/login', async (req, res, next) => {
       res.status(401).send({ status: "error", message: req.session.error });
     }
   });
+});
+
+app.post('/user', async (req, res) => {
+  try {
+    const { username, firstname, lastname, email, password } = req.body;
+    // Hash the password using bcrypt
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Insert the user into the database
+    await db.none('INSERT INTO users(username, firstname, lastname, email, password) VALUES($1, $2, $3, $4, $5)',
+      [username, firstname, lastname, email, hashedPassword]);
+    
+    res.status(201).send({ status: "success", message: "Utilisateur crée" });
+  } catch (error) {
+    console.error('ERROR:', error);
+    res.status(500).send({ status: "error", message: "Erreur sur la création d'utilisateur" });
+  }
 });
 
 app.get('/user', async (req, res) => {

@@ -35,8 +35,8 @@ function LoginPage() {
   }, [user, navigate]);
 
   const initialValues = {
-    username: 'admin',
-    password: 'Password1',
+    username: '',
+    password: '',
     submit: null
   };
 
@@ -104,7 +104,6 @@ function LoginPage() {
                             </FormHelperText>
                         )}
                             <TextField
-                                autoFocus
                                 error={!!(formik.touched.username && formik.errors.username)}
                                 fullWidth
                                 helperText={formik.touched.username && formik.errors.username}
