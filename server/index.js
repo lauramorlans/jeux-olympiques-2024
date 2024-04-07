@@ -31,7 +31,6 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// GET /offers endpoint
 app.get('/offers', async (req, res) => {
   try {
     const offers = await db.any('SELECT * FROM offers');
@@ -39,6 +38,46 @@ app.get('/offers', async (req, res) => {
   } catch (error) {
     console.error('ERROR:', error);
     res.status(500).send('Error fetching offers');
+  }
+});
+
+app.patch('/offer/:id', async (req, res) => {
+  try {
+    const offerId = req.params.id;
+    const { name, active } = req.body;
+
+    // Check if name and active fields are provided
+    if (!name && !active) {
+      return res.status(400).json({ error: 'Name or active field must be provided for update' });
+    }
+
+    // Construct the SQL query based on provided fields
+    const updateFields = [];
+    const params = [];
+
+    if (name) {
+      updateFields.push('name = $1');
+      params.push(name);
+    }
+    if (active !== undefined) {
+      updateFields.push('active = $2');
+      params.push(active);
+    }
+
+    // Update offer in the database
+    const query = `
+      UPDATE offers
+      SET ${updateFields.join(', ')}
+      WHERE id = $${params.length + 1}
+      RETURNING *;
+    `;
+    params.push(offerId);
+
+    const updatedOffer = await db.one(query, params);
+    res.json(updatedOffer);
+  } catch (error) {
+    console.error('ERROR:', error);
+    res.status(500).send('Error updating offer');
   }
 });
 

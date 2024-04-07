@@ -37,7 +37,7 @@ const Navigation = () => {
   ];
 
   const accountMenuItems = [
-    { text: 'Mon compte', onClick: () => { handleClosePopover(); navigate('/account') } },
+    { text: 'Mon compte', onClick: () => { handleClosePopover(); navigate(user?.role === 'admin' ? '/dashboard' : '/account') } },
     { text: 'Déconnexion', onClick: () => { handleClosePopover(); dispatch(logout()).then(() => { navigate('/login'); }); } },
   ];
 

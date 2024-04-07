@@ -29,10 +29,10 @@ function LoginPage() {
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
     useEffect(() => {
-    if (user?.id) {
-        navigate('/account');
-    }
-  }, [user, navigate]);
+        if (user?.id) {
+            navigate(user?.role === 'admin' ? '/dashboard' : '/account');
+        }
+    }, [user, navigate]);
 
   const initialValues = {
     username: '',
@@ -59,7 +59,7 @@ function LoginPage() {
             if (error) {
                 setLoginError(error)
             } else {
-                navigate('/account');
+                navigate(user?.role === 'admin' ? '/dashboard' : '/account');
             }
         });
     }
