@@ -14,6 +14,8 @@ import {
   TextField,
   DialogActions,
   Button,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import { getOffers } from '../axios/getOffers';
@@ -197,6 +199,7 @@ function DashboardPage() {
             onChange={formikCreate.handleChange}
             type="text"
             value={formikCreate.values.name}
+            sx={{ marginTop: 2, marginBottom: 2 }}
           />
         </DialogContent>
         <DialogActions>
@@ -217,9 +220,11 @@ function DashboardPage() {
       <Dialog
         open={editModal}
         onClose={onHandleClose}
+        fullWidth
+        maxWidth="xs"
       >
         <DialogTitle>Modifier offre existante</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ marginTop: 1, marginBottom: 1 }}>
           <TextField
             error={!!(formikEdit.touched.name && formikEdit.errors.name)}
             fullWidth
@@ -230,15 +235,25 @@ function DashboardPage() {
             onChange={formikEdit.handleChange}
             type="text"
             value={formikEdit.values.name || ''}
+            sx={{ marginTop: 2, marginBottom: 2 }}
+          />
+          <FormControlLabel
+            label="Active"
+            control={
+              <Switch
+                name="active"
+                checked={formikEdit.values.active}
+                onChange={(event) => {
+                  formikEdit.handleChange(event);
+                }}
+              />
+            }
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={onHandleClose}>Annuler</Button>
           <Button
             disabled={formikEdit.isSubmitting}
-            fullWidth
-            size="large"
-            sx={{ mt: 2 }}
             type="submit"
             variant="contained"
             onClick={formikEdit.handleSubmit}

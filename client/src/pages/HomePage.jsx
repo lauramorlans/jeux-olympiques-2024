@@ -21,7 +21,7 @@ function HomePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const offersData = await getOffers();
+      const offersData = await getOffers(true);
       setOffers(offersData);
     };
 

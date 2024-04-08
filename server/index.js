@@ -33,7 +33,15 @@ app.use(session({
 
 app.get('/offers', async (req, res) => {
   try {
-    const offers = await db.any('SELECT * FROM offers');
+    let query = 'SELECT * FROM offers';
+    const { active } = req.query;
+
+    if (active) {
+      const isActive = active.toLowerCase() === 'true';
+      query += ` WHERE active = ${isActive}`;
+    }
+
+    const offers = await db.any(query);
     res.json(offers);
   } catch (error) {
     console.error('ERROR:', error);

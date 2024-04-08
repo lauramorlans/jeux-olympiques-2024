@@ -58,8 +58,6 @@ function LoginPage() {
         dispatch(signIn(values.username, values.password)).then((error) => {
             if (error) {
                 setLoginError(error)
-            } else {
-                navigate(user?.role === 'admin' ? '/dashboard' : '/account');
             }
         });
     }
