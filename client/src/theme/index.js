@@ -220,7 +220,7 @@ export const theme = createTheme({
         },
         textSizeLarge: {
           padding: '12px 16px'
-        }
+        },
       }
     },
       MuiBadge: {

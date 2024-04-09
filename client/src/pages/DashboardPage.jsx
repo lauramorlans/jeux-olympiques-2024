@@ -167,9 +167,16 @@ function DashboardPage() {
           <Typography variant="h5" sx={{ marginTop: 6, marginBottom: 6 }}>Bienvenue dans votre espace administration, {user?.firstname} {user?.lastname}</Typography>
         </Container>
       </Box>
-      <Container maxWidth="lg" sx={{ padding: 6 }}>
-        <Typography variant="h5" sx={{ marginTop: 6, marginBottom: 6, textAlign: 'center' }}>Voici la liste des offres actuelles</Typography>
-        <Typography variant="body1" sx={{ marginTop: 6, marginBottom: 6, textAlign: 'center' }}>{'Par soucis de sécurité, une fois une offre crée, seul son nom est modifiable. Vous ne pouvez pas supprimer d\'offre, mais vous pouvez la rendre inactive.'}</Typography>
+      <Container maxWidth="lg" sx={{ padding: 6, textAlign: 'center'  }}>
+        <Typography variant="h5" sx={{ marginTop: 6, marginBottom: 6 }}>Liste des offres</Typography>
+        <Typography variant="body1" sx={{ marginTop: 6, marginBottom: 6 }}>{'Par soucis de sécurité, une fois une offre crée, seul son nom est modifiable. Vous ne pouvez pas supprimer d\'offre, mais vous pouvez la rendre inactive.'}</Typography>
+        <Button
+            variant="contained"
+            onClick={() => setCreateModal(true)}
+            sx={{ marginBottom: 6 }}
+          >
+            Créer une offre
+          </Button>
         <DataGrid
           rows={offers}
           columns={columns}
@@ -186,6 +193,8 @@ function DashboardPage() {
       <Dialog
         open={createModal}
         onClose={onHandleClose}
+        fullWidth
+        maxWidth="xs"
       >
         <DialogTitle>Créer une offre</DialogTitle>
         <DialogContent>
@@ -201,14 +210,23 @@ function DashboardPage() {
             value={formikCreate.values.name}
             sx={{ marginTop: 2, marginBottom: 2 }}
           />
+          <FormControlLabel
+            label="Active"
+            control={
+              <Switch
+                name="active"
+                checked={formikCreate.values.active}
+                onChange={(event) => {
+                  formikCreate.handleChange(event);
+                }}
+              />
+            }
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={onHandleClose}>Annuler</Button>
           <Button
             disabled={formikCreate.isSubmitting}
-            fullWidth
-            size="large"
-            sx={{ mt: 2 }}
             type="submit"
             variant="contained"
             onClick={formikCreate.handleSubmit}
