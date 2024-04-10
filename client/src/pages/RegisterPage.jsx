@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
     Link,
     Box,
@@ -21,8 +22,16 @@ import { postUser } from '../axios/postUser';
 function RegisterPage() {
     const [accountCreated, setAccountCreated] = useState(false);
 
+    const user = useSelector(state => state.user);
+
     const navigate = useNavigate();
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
+    useEffect(() => {
+        if (user?.id) {
+            navigate(user?.role === 'admin' ? '/dashboard' : '/account');
+        }
+    }, [user, navigate]);
 
   const initialValues = {
     username: '',

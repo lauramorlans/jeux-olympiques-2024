@@ -49,6 +49,24 @@ app.get('/offers', async (req, res) => {
   }
 });
 
+app.post('/offer', async (req, res) => {
+  try {
+    const { name, price, includedtickets, active } = req.body;
+
+    if (!name || typeof price !== 'number' || typeof includedtickets !== 'number' || typeof active !== 'boolean') {
+      return res.status(400).send('Invalid data provided');
+    }
+
+    const query = 'INSERT INTO offers (name, price, includedtickets, active) VALUES ($1, $2, $3, $4) RETURNING *';
+    const newOffer = await db.one(query, [name, price, includedtickets, active]);
+    
+    res.status(201).json(newOffer);
+  } catch (error) {
+    console.error('ERROR:', error);
+    res.status(500).send('Error creating offer');
+  }
+});
+
 app.patch('/offer/:id', async (req, res) => {
   try {
     const offerId = req.params.id;

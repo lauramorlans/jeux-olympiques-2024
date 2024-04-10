@@ -28,7 +28,6 @@ function DashboardPage() {
   const [offers, setOffers] = useState([]);
   const [editModal, setEditModal] = useState(false);
   const [createModal, setCreateModal] = useState(false);
-  const [draftData, setDraftData] = useState({});
 
   const fetchOffers = async () => {
     const offersData = await getOffers();
@@ -39,24 +38,18 @@ function DashboardPage() {
     fetchOffers();
   }, []);
 
-  useEffect(() => {
-    formikEdit.setValues({
-      ...draftData,
-      submit: null,
-    });
-  }, [draftData]);
-
   const onHandleClose = () => {
     setCreateModal(false);
     setEditModal(false);
-    setDraftData({});
+    formikCreate.resetForm();
+    formikEdit.resetForm();
   };
 
   const formikCreate = useFormik({
     initialValues: {
       name: '',
       price: 0,
-      includedTickets: 1,
+      includedtickets: 1,
       active: true,
       submit: null,
     },
@@ -66,15 +59,17 @@ function DashboardPage() {
         .max(255)
         .required('Nom est requis'),
       price: Yup
-        .number(),
-      includedTickets: Yup
-        .number(),
+        .number()
+        .min(0, 'Le prix doit être au moins 0'),
+      includedtickets: Yup
+        .number()
+        .min(1, 'Le nombre de tickets inclus doit être au moins 1'),
       active: Yup
         .boolean()
     }),
     onSubmit: async (values) => {
       try {
-        await postOffer({ name: values.name, price: values.price, includedTickets: values.includedTickets, active: values.active });
+        await postOffer({ name: values.name, price: values.price, includedtickets: values.includedtickets, active: values.active });
         onHandleClose();
         fetchOffers(); // Fetch offers again after successful creation
       } catch (err) {
@@ -85,6 +80,11 @@ function DashboardPage() {
 
   const formikEdit = useFormik({
     initialValues: {
+      id: '',
+      name: '',
+      price: 0,
+      includedtickets: 1,
+      active: false,
       submit: null,
     },
     validationSchema: Yup.object({
@@ -99,7 +99,7 @@ function DashboardPage() {
       try {
         await editOffer({ id: values.id, name: values.name, active: values.active });
         onHandleClose();
-        fetchOffers(); // Fetch offers again after successful editing
+        fetchOffers();
       } catch (err) {
         console.error(err);
       }
@@ -152,7 +152,15 @@ function DashboardPage() {
       sortable: false,
       renderCell: (row) => {
         return (
-          <IconButton onClick={() => { setEditModal(true); setDraftData(row?.row) }}>
+          <IconButton onClick={() => { 
+            formikEdit.setValues({
+              id: row.row.id,
+              name: row.row.name,
+              active: row.row.active,
+              submit: null,
+            });
+            setEditModal(true);
+          }}>
             <Edit />
           </IconButton>
         );
@@ -196,44 +204,73 @@ function DashboardPage() {
         fullWidth
         maxWidth="xs"
       >
-        <DialogTitle>Créer une offre</DialogTitle>
-        <DialogContent>
-          <TextField
-            error={!!(formikCreate.touched.name && formikCreate.errors.name)}
-            fullWidth
-            helperText={formikCreate.touched.name && formikCreate.errors.name}
-            label="Nom"
-            name="name"
-            onBlur={formikCreate.handleBlur}
-            onChange={formikCreate.handleChange}
-            type="text"
-            value={formikCreate.values.name}
-            sx={{ marginTop: 2, marginBottom: 2 }}
-          />
-          <FormControlLabel
-            label="Active"
-            control={
-              <Switch
-                name="active"
-                checked={formikCreate.values.active}
-                onChange={(event) => {
-                  formikCreate.handleChange(event);
-                }}
-              />
-            }
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onHandleClose}>Annuler</Button>
-          <Button
-            disabled={formikCreate.isSubmitting}
-            type="submit"
-            variant="contained"
-            onClick={formikCreate.handleSubmit}
-          >
-            Sauvegarder
-          </Button>
-        </DialogActions>
+        <form
+          noValidate
+          onSubmit={formikCreate.handleSubmit}
+        >
+          <DialogTitle>Créer une offre</DialogTitle>
+          <DialogContent>
+            <TextField
+              error={!!(formikCreate.touched.name && formikCreate.errors.name)}
+              fullWidth
+              helperText={formikCreate.touched.name && formikCreate.errors.name}
+              label="Nom"
+              name="name"
+              onBlur={formikCreate.handleBlur}
+              onChange={formikCreate.handleChange}
+              type="text"
+              value={formikCreate.values.name}
+              sx={{ marginTop: 2, marginBottom: 2 }}
+            />
+            <TextField
+              error={!!(formikCreate.touched.price && formikCreate.errors.price)}
+              fullWidth
+              helperText={formikCreate.touched.price && formikCreate.errors.price}
+              label="Prix"
+              name="price"
+              onBlur={formikCreate.handleBlur}
+              onChange={formikCreate.handleChange}
+              type="number"
+              value={formikCreate.values.price}
+              sx={{ marginTop: 2, marginBottom: 2 }}
+            />
+            <TextField
+              error={!!(formikCreate.touched.includedtickets && formikCreate.errors.includedtickets)}
+              fullWidth
+              helperText={formikCreate.touched.includedtickets && formikCreate.errors.includedtickets}
+              label="Tickets inclus"
+              name="includedtickets"
+              onBlur={formikCreate.handleBlur}
+              onChange={formikCreate.handleChange}
+              type="number"
+              value={formikCreate.values.includedtickets}
+              sx={{ marginTop: 2, marginBottom: 2 }}
+            />
+            <FormControlLabel
+              label="Active"
+              control={
+                <Switch
+                  name="active"
+                  checked={formikCreate.values.active}
+                  onChange={(event) => {
+                    formikCreate.handleChange(event);
+                  }}
+                />
+              }
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onHandleClose}>Annuler</Button>
+            <Button
+              disabled={formikCreate.isSubmitting}
+              type="submit"
+              variant="contained"
+              onClick={formikCreate.handleSubmit}
+            >
+              Sauvegarder
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
       <Dialog
         open={editModal}
@@ -241,44 +278,49 @@ function DashboardPage() {
         fullWidth
         maxWidth="xs"
       >
-        <DialogTitle>Modifier offre existante</DialogTitle>
-        <DialogContent sx={{ marginTop: 1, marginBottom: 1 }}>
-          <TextField
-            error={!!(formikEdit.touched.name && formikEdit.errors.name)}
-            fullWidth
-            helperText={formikEdit.touched.name && formikEdit.errors.name}
-            label="Nom"
-            name="name"
-            onBlur={formikEdit.handleBlur}
-            onChange={formikEdit.handleChange}
-            type="text"
-            value={formikEdit.values.name || ''}
-            sx={{ marginTop: 2, marginBottom: 2 }}
-          />
-          <FormControlLabel
-            label="Active"
-            control={
-              <Switch
-                name="active"
-                checked={formikEdit.values.active}
-                onChange={(event) => {
-                  formikEdit.handleChange(event);
-                }}
-              />
-            }
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onHandleClose}>Annuler</Button>
-          <Button
-            disabled={formikEdit.isSubmitting}
-            type="submit"
-            variant="contained"
-            onClick={formikEdit.handleSubmit}
-          >
-            Sauvegarder
-          </Button>
-        </DialogActions>
+        <form
+          noValidate
+          onSubmit={formikEdit.handleSubmit}
+        >
+          <DialogTitle>Modifier offre existante</DialogTitle>
+          <DialogContent sx={{ marginTop: 1, marginBottom: 1 }}>
+            <TextField
+              error={!!(formikEdit.touched.name && formikEdit.errors.name)}
+              fullWidth
+              helperText={formikEdit.touched.name && formikEdit.errors.name}
+              label="Nom"
+              name="name"
+              onBlur={formikEdit.handleBlur}
+              onChange={formikEdit.handleChange}
+              type="text"
+              value={formikEdit.values.name || ''}
+              sx={{ marginTop: 2, marginBottom: 2 }}
+            />
+            <FormControlLabel
+              label="Active"
+              control={
+                <Switch
+                  name="active"
+                  checked={formikEdit.values.active}
+                  onChange={(event) => {
+                    formikEdit.handleChange(event);
+                  }}
+                />
+              }
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onHandleClose}>Annuler</Button>
+            <Button
+              disabled={formikEdit.isSubmitting}
+              type="submit"
+              variant="contained"
+              onClick={formikEdit.handleSubmit}
+            >
+              Sauvegarder
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </>
   );
