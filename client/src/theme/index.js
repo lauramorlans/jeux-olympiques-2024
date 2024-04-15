@@ -226,7 +226,7 @@ export const theme = createTheme({
       MuiBadge: {
         styleOverrides: {
           badge: {
-            backgroundColor: '#F04438',
+            backgroundColor: '#d7c378',
             color: 'white'
           }
         },

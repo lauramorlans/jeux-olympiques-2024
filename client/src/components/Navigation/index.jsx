@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Stack, IconButton, Drawer, List, ListItemButton, ListItemText, Box, Popover, Paper, Button } from '@mui/material';
+import { Badge, Stack, IconButton, Drawer, List, ListItemButton, ListItemText, Box, Popover, Paper, Button } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import { ShoppingBasket, Info, Home, Menu, ConfirmationNumber, AccountCircle } from '@mui/icons-material';
 import { neutral, purple } from '../../theme/colors'; 
@@ -11,12 +12,23 @@ import logo from './logo.png';
 const Navigation = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [basket, setBasket] = useState({});
 
   const user = useSelector(state => state.user);
+
+  useEffect(() => {
+    // Retrieve basket data from cookie when component mounts
+    const basketData = Cookies.get('basket');
+    if (basketData) {
+      const parsedBasket = JSON.parse(basketData);
+      setBasket(parsedBasket);
+    }
+  }, []);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
+  const basketSize = Object.values(basket).reduce((acc, curr) => acc + curr, 0);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -100,7 +112,13 @@ const Navigation = () => {
         </div>
         <div>
           <IconButton color="inherit" aria-label="basket" onClick={() => navigate('/basket')}>
-            <ShoppingBasket color="secondary" />
+            {basketSize > 0 ? (
+              <Badge badgeContent={basketSize} color="secondary" max={99}>
+                <ShoppingBasket color="secondary" />
+              </Badge>
+            ) : (
+              <ShoppingBasket color="secondary" />
+            )}
           </IconButton>
           <IconButton color="inherit" aria-label="account" onClick={handleAccountButtonClick}>
             <AccountCircle color="secondary" />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 import {
     Box,
     Grid,
@@ -39,6 +40,22 @@ function TicketsPage() {
     setQuantities({ ...quantities, [offerId]: quantity });
   };
 
+  const addTicketToBasket = (offerId) => {
+    // Retrieve the current basket data from the cookie
+    const currentBasketJSON = Cookies.get('basket');
+
+    // Parse the JSON string to convert it into a JavaScript object
+    const currentBasket = currentBasketJSON ? JSON.parse(currentBasketJSON) : {};
+
+    // update basket with more quantities
+    const updatedBasket = {
+        ...currentBasket,
+        [offerId]: (currentBasket[offerId] || 0) + quantities[offerId]
+    };
+    // Serialize and store basket data in a cookie
+    Cookies.set('basket', JSON.stringify(updatedBasket), { expires: 7 }); // Cookie expires in 7 days
+  };
+
   return (
     <Box sx={{ marginTop: 6, backgroundColor: '#111111' }}>
         <Container maxWidth="lg" sx={{ padding: 6 }}>
@@ -75,7 +92,7 @@ function TicketsPage() {
                                             ))}
                                         </Select>
                                     </FormControl>
-                                    <Button fullWidth variant="contained" onClick={() => {}} sx={{ marginTop: 3 }}>Ajouter au panier</Button>
+                                    <Button fullWidth variant="contained" onClick={() => addTicketToBasket(offer?.id)} sx={{ marginTop: 3 }}>Ajouter au panier</Button>
                                 </CardContent>
                             </Card>
                         </Grid>
