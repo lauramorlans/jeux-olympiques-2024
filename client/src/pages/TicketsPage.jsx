@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Card, CardContent, Button, Typography, Container } from '@mui/material';
+import {
+    Box,
+    Grid,
+    Card,
+    CardContent,
+    Button,
+    Typography,
+    Container,
+    Select,
+    FormControl,
+    MenuItem,
+    InputLabel,
+} from '@mui/material';
 import { getOffers } from '../axios/getOffers';
 
 function TicketsPage() {
   const [offers, setOffers] = useState([]);
+  const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,6 +26,18 @@ function TicketsPage() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const initQuantities = {};
+    offers.forEach(offer => {
+      initQuantities[offer.id] = 1;
+    });
+    setQuantities(initQuantities);
+  }, [offers]);
+
+  const handleQuantityChange = (offerId, quantity) => {
+    setQuantities({ ...quantities, [offerId]: quantity });
+  };
 
   return (
     <Box sx={{ marginTop: 6, backgroundColor: '#111111' }}>
@@ -35,15 +60,28 @@ function TicketsPage() {
                                     <Typography variant="body2" component="p">
                                         {offer?.price}€ - {offer?.includedtickets} personne{offer?.includedtickets === 1 ? '' : 's'}
                                     </Typography>
+                                    <FormControl fullWidth sx={{ marginTop: 3 }}>
+                                        <InputLabel id="quantity">Nombre de tickets</InputLabel>
+                                        <Select
+                                            labelId="quantity"
+                                            label="Nombre de tickets"
+                                            value={quantities[offer?.id] || ''}
+                                            onChange={(e) => handleQuantityChange(offer?.id, e.target.value)}
+                                        >
+                                            {Array.from({ length: 10 }, (_, index) => (
+                                                <MenuItem key={index + 1} value={index + 1}>
+                                                    {index + 1}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    <Button fullWidth variant="contained" onClick={() => {}} sx={{ marginTop: 3 }}>Ajouter au panier</Button>
                                 </CardContent>
                             </Card>
                         </Grid>
                     );
                 })}
             </Grid>
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 6 }}>
-                <Button variant="contained" onClick={() => {}}>Réserver</Button>
-            </Box>
         </Container>
     </Box>
   );
