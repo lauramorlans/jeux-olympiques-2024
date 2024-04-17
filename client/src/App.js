@@ -12,8 +12,10 @@ import AboutPage from './pages/AboutPage'
 import DashboardPage from './pages/DashboardPage'
 import TicketsPage from './pages/TicketsPage'
 import RegisterPage from './pages/RegisterPage'
+import BasketPage from './pages/BasketPage'
 import NoAccessLoginPage from './pages/NoAccessLoginPage'
 import NoAccessRolePage from './pages/NoAccessRolePage'
+import NotFoundPage from './pages/NotFoundPage'
 import store from './redux/store'
 import './App.css';
 
@@ -35,8 +37,10 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/tickets" element={<TicketsPage />} />
+              <Route path="/basket" element={<BasketPage />} />
               <Route path="/no-access-login" element={<NoAccessLoginPage />} />
               <Route path="/no-access-role" element={<NoAccessRolePage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </MainLayout>
         </ThemeProvider>
