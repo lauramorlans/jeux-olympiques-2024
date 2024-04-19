@@ -18,9 +18,9 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import { Edit } from '@mui/icons-material';
-import { getOffers } from '../axios/getOffers';
-import { postOffer } from '../axios/postOffer';
-import { editOffer } from '../axios/editOffer';
+import { getOffers } from '../actions/getOffers';
+import { postOffer } from '../actions/postOffer';
+import { editOffer } from '../actions/editOffer';
 
 function DashboardPage() {
   const user = useSelector(state => state.user);

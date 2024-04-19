@@ -1,34 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Badge, Stack, IconButton, Drawer, List, ListItemButton, ListItemText, Box, Popover, Paper, Button } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import { ShoppingBasket, Info, Home, Menu, ConfirmationNumber, AccountCircle } from '@mui/icons-material';
 import { neutral, purple } from '../../theme/colors'; 
-import { logout } from '../../axios/logout';
+import { logout } from '../../actions/logout';
 import logo from './logo.png';
 
 const Navigation = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [basket, setBasket] = useState({});
 
   const user = useSelector(state => state.user);
-
-  useEffect(() => {
-    // Retrieve basket data from cookie when component mounts
-    const basketData = Cookies.get('basket');
-    if (basketData) {
-      const parsedBasket = JSON.parse(basketData);
-      setBasket(parsedBasket);
-    }
-  }, []);
+  const basket = useSelector(state => state.basket);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
   const basketSize = Object.values(basket).reduce((acc, curr) => acc + curr, 0);
+
+  console.log('basket:', basket)
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);

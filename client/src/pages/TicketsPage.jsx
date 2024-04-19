@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import {
     Box,
@@ -13,47 +14,44 @@ import {
     MenuItem,
     InputLabel,
 } from '@mui/material';
-import { getOffers } from '../axios/getOffers';
+import { getOffers } from '../actions/getOffers';
+import { updateBasket } from '../actions/updateBasket';
 
 function TicketsPage() {
   const [offers, setOffers] = useState([]);
   const [quantities, setQuantities] = useState({});
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    // Retrieve basket data from cookie when component mounts
+    const basketData = Cookies.get('basket');
+    if (basketData) {
+        const parsedBasket = JSON.parse(basketData);
+        setQuantities(parsedBasket);
+    }
+
     const fetchData = async () => {
-      const offersData = await getOffers(true);
-      setOffers(offersData);
+        const offersData = await getOffers(true);
+        setOffers(offersData);
     };
 
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const initQuantities = {};
-    offers.forEach(offer => {
-      initQuantities[offer.id] = 1;
-    });
-    setQuantities(initQuantities);
-  }, [offers]);
-
   const handleQuantityChange = (offerId, quantity) => {
     setQuantities({ ...quantities, [offerId]: quantity });
   };
 
-  const addTicketToBasket = (offerId) => {
-    // Retrieve the current basket data from the cookie
-    const currentBasketJSON = Cookies.get('basket');
-
-    // Parse the JSON string to convert it into a JavaScript object
-    const currentBasket = currentBasketJSON ? JSON.parse(currentBasketJSON) : {};
-
+  const updateQuantityBasket = (offerId) => {
     // update basket with more quantities
     const updatedBasket = {
-        ...currentBasket,
-        [offerId]: (currentBasket[offerId] || 0) + quantities[offerId]
+        ...quantities,
+        [offerId]: quantities[offerId],
     };
     // Serialize and store basket data in a cookie
     Cookies.set('basket', JSON.stringify(updatedBasket), { expires: 7 }); // Cookie expires in 7 days
+    dispatch(updateBasket(updatedBasket));
   };
 
   return (
@@ -92,7 +90,7 @@ function TicketsPage() {
                                             ))}
                                         </Select>
                                     </FormControl>
-                                    <Button fullWidth variant="contained" onClick={() => addTicketToBasket(offer?.id)} sx={{ marginTop: 3 }}>Ajouter au panier</Button>
+                                    <Button fullWidth variant="contained" onClick={() => updateQuantityBasket(offer?.id)} sx={{ marginTop: 3 }}>Ajouter au panier</Button>
                                 </CardContent>
                             </Card>
                         </Grid>

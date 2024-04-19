@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Box, InputLabel, Select, FormControl, MenuItem, Card, CardActions, CardContent, Container, Button, Grid, Typography } from '@mui/material';
-import { getOffers } from '../axios/getOffers';
+import { getOffers } from '../actions/getOffers';
+import { updateBasket } from '../actions/updateBasket';
 
 function BasketPage() {
     const [offers, setOffers] = useState([]);
-    const [basket, setBasket] = useState({});
+
+    const user = useSelector(state => state.user);
+    const basket = useSelector(state => state.basket);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
   useEffect(() => {
-    // Retrieve basket data from cookie when component mounts
-    const basketData = Cookies.get('basket');
-    if (basketData) {
-    const parsedBasket = JSON.parse(basketData);
-    setBasket(parsedBasket);
-  }
-
-  const fetchData = async () => {
-    const offersData = await getOffers(true);
-    setOffers(offersData);
-  };
+    const fetchData = async () => {
+        const offersData = await getOffers(true);
+        setOffers(offersData);
+    };
 
     fetchData();
   }, []);
@@ -30,14 +31,18 @@ function BasketPage() {
     // Parse the JSON string to convert it into a JavaScript object
     const currentBasket = currentBasketJSON ? JSON.parse(currentBasketJSON) : {};
 
-    // update basket with more quantities
+    // update basket with new quantity
     const updatedBasket = {
         ...currentBasket,
         [offerId]: quantity,
     };
+
     // Serialize and store basket data in a cookie
     Cookies.set('basket', JSON.stringify(updatedBasket), { expires: 7 }); // Cookie expires in 7 days
+    dispatch(updateBasket(updatedBasket));
   };
+
+  const total = 0;
 
   return (
     <Box sx={{ marginTop: 6, paddingTop: 6, paddingBottom: 6, backgroundColor: '#111111' }}>
@@ -123,13 +128,18 @@ function BasketPage() {
                             </Grid>
                             <Grid item xs={1} sm={1} md={1} lg={1}>
                                 <Typography variant="h6" component="div">
-                                    €0
+                                    {total}€
                                 </Typography>
                             </Grid>
+                            {!user?.id && (
+                                <Typography color="text.secondary" variant="body2">
+                                    {'Vous aurez besoin d\'un compte pour commander.'}
+                                </Typography>
+                            )}
                         </Grid>
                     </CardContent>
                     <CardActions>
-                        <Button variant="contained" sx={{ marginLeft: 2, marginBottom: 3 }}>
+                        <Button variant="contained" sx={{ marginLeft: 2, marginBottom: 3 }} onClick={() => user?.id ? navigate('/order') : navigate('/login')}>
                             Commander
                         </Button>
                     </CardActions>

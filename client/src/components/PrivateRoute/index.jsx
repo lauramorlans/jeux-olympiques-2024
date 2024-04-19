@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { getUser } from '../../axios/getUser';
+import { getUser } from '../../actions/getUser';
 
 function PrivateRoute(props) {
   const { isAdmin, isLoggedIn } = props;

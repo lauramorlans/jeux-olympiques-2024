@@ -17,7 +17,7 @@ import {
     Button,
     useMediaQuery,
 } from '@mui/material';
-import { postUser } from '../axios/postUser';
+import { postUser } from '../actions/postUser';
 
 function RegisterPage() {
     const [accountCreated, setAccountCreated] = useState(false);

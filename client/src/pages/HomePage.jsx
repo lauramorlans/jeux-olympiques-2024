@@ -9,7 +9,7 @@ import {
     CardContent,
     Grid,
 } from '@mui/material';
-import { getOffers } from '../axios/getOffers';
+import { getOffers } from '../actions/getOffers';
 import olympic from '../images/olympic.jpg';
 import horse from '../images/horse.jpg';
 import sprint from '../images/sprint.jpg';

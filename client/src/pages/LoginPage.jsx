@@ -17,7 +17,7 @@ import {
     Button,
     useMediaQuery,
 } from '@mui/material';
-import { signIn } from '../axios/signIn';
+import { signIn } from '../actions/signIn';
 
 function LoginPage() {
     const user = useSelector(state => state.user);

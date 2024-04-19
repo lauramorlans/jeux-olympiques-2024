@@ -1,15 +1,22 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
 import { Box, Typography } from '@mui/material';
 import Navigation from '../Navigation';
-import { getUser } from '../../axios/getUser';
+import { getUser } from '../../actions/getUser';
+import { updateBasket } from '../../actions/updateBasket';
 
 const MainLayout = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUser());
+    const basketData = Cookies.get('basket');
+    if (basketData) {
+      const parsedBasket = JSON.parse(basketData);
+      dispatch(updateBasket(parsedBasket));
+    }
   }, [dispatch]);
 
   return (
