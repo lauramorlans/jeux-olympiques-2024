@@ -34,7 +34,7 @@ function PrivateRoute(props) {
           replace
         />
       );
-    } else if (isAdmin && user?.role !== 'admin') {
+    } else if ((isAdmin && user?.role !== 'admin') || (isLoggedIn && user?.role === 'admin')) {
       render = (
         <Navigate
           to="/no-access-role"

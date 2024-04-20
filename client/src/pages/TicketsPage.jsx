@@ -40,7 +40,7 @@ function TicketsPage() {
     // update basket with more quantities
     const updatedBasket = {
         ...quantities,
-        [offerId]: quantities[offerId],
+        [offerId]: quantities[offerId] || 1,
     };
     // Serialize and store basket data in a cookie
     Cookies.set('basket', JSON.stringify(updatedBasket), { expires: 7 }); // Cookie expires in 7 days
@@ -73,7 +73,7 @@ function TicketsPage() {
                                         <Select
                                             labelId="quantity"
                                             label="Nombre de tickets"
-                                            value={quantities[offer?.id] || ''}
+                                            value={quantities[offer?.id] || 1}
                                             onChange={(e) => handleQuantityChange(offer?.id, e.target.value)}
                                         >
                                             {Array.from({ length: 10 }, (_, index) => (

@@ -2,7 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Box, InputLabel, Select, FormControl, MenuItem, Card, CardActions, CardContent, Container, Button, Grid, Typography } from '@mui/material';
+import { Box, IconButton, InputLabel, Select, FormControl, MenuItem, Card, CardActions, CardContent, Container, Button, Grid, Typography } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 import { updateBasket } from '../actions/updateBasket';
 
 function BasketPage() {
@@ -13,25 +14,45 @@ function BasketPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-  const handleQuantityChange = (offerId, quantity) => {
-    // Retrieve the current basket data from the cookie
-    const currentBasketJSON = Cookies.get('basket');
-
-    // Parse the JSON string to convert it into a JavaScript object
-    const currentBasket = currentBasketJSON ? JSON.parse(currentBasketJSON) : {};
-
-    // update basket with new quantity
+    const onDeleteQuantity = (offerId) => {
     const updatedBasket = {
-        ...currentBasket,
+        ...basket,
+    };
+
+    delete updatedBasket[offerId];
+
+    // Serialize and store new basket data in a cookie
+    Cookies.set('basket', JSON.stringify(updatedBasket), { expires: 7 }); // Cookie expires in 7 days
+    dispatch(updateBasket(updatedBasket));
+    }
+
+  const handleQuantityChange = (offerId, quantity) => {
+    const updatedBasket = {
+        ...basket,
         [offerId]: quantity,
     };
 
-    // Serialize and store basket data in a cookie
+    // Serialize and store new basket data in a cookie
     Cookies.set('basket', JSON.stringify(updatedBasket), { expires: 7 }); // Cookie expires in 7 days
     dispatch(updateBasket(updatedBasket));
   };
 
-  const total = 0;
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+
+    for (const offerId in basket) {
+        const quantity = basket[offerId];
+        const offer = offers.find((offer) => offer.id.toString() === offerId.toString());
+
+        if (offer) {
+            totalPrice += offer.price * quantity;
+        }
+    }
+
+    return totalPrice;
+}
+
+  const hasEmptyBasket = Object.keys(basket).length === 0;
 
   return (
     <Box sx={{ marginTop: 6, paddingTop: 6, paddingBottom: 6, backgroundColor: '#111111' }}>
@@ -50,10 +71,15 @@ function BasketPage() {
                                     </Typography>
                                     <hr />
                                     <Grid container>
-                                        <Grid item xs={12}>
+                                        <Grid item xs={11}>
                                             <Typography variant="body1" component="div">
                                                 Cette offre contient des tickets pour {offer?.includedtickets} personne{offer?.includedtickets === 1 ? '' : 's'}.
                                             </Typography>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <IconButton onClick={() => onDeleteQuantity(offerId)}>
+                                                <Delete />
+                                            </IconButton>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Typography
@@ -99,6 +125,23 @@ function BasketPage() {
                             </Card>
                         )
                     })}
+                    {hasEmptyBasket && (
+                        <Card>
+                            <CardContent>
+                                <Typography variant="div" component="h2">
+                                    Panier vide
+                                </Typography>
+                                <hr />
+                                <Grid container>
+                                    <Grid item xs={12}>
+                                        <Typography variant="body1" component="div">
+                                            Votre panier est actuellement vide.
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </CardContent>
+                        </Card>
+                    )}
                     </Grid>
                 </Grid>
                 </Grid>
@@ -117,7 +160,7 @@ function BasketPage() {
                             </Grid>
                             <Grid item xs={1} sm={1} md={1} lg={1}>
                                 <Typography variant="h6" component="div">
-                                    {total}€
+                                    {calculateTotalPrice()}€
                                 </Typography>
                             </Grid>
                             {!user?.id && (
@@ -125,10 +168,15 @@ function BasketPage() {
                                     {'Vous aurez besoin d\'un compte pour commander.'}
                                 </Typography>
                             )}
+                            {user.role === 'admin' && (
+                                <Typography color="text.secondary" variant="body2">
+                                    {'Votre role d\'administrateur ne vous permet pas de commander.'}
+                                </Typography>
+                            )}
                         </Grid>
                     </CardContent>
                     <CardActions>
-                        <Button variant="contained" sx={{ marginLeft: 2, marginBottom: 3 }} onClick={() => user?.id ? navigate('/order') : navigate('/login')}>
+                        <Button disabled={hasEmptyBasket || user.role === 'admin'} variant="contained" sx={{ marginLeft: 2, marginBottom: 3 }} onClick={() => user?.id ? navigate('/order') : navigate('/login')}>
                             Commander
                         </Button>
                     </CardActions>

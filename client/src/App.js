@@ -13,6 +13,7 @@ import DashboardPage from './pages/DashboardPage'
 import TicketsPage from './pages/TicketsPage'
 import RegisterPage from './pages/RegisterPage'
 import BasketPage from './pages/BasketPage'
+import OrderPage from './pages/OrderPage'
 import NoAccessLoginPage from './pages/NoAccessLoginPage'
 import NoAccessRolePage from './pages/NoAccessRolePage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -29,6 +30,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route element={<PrivateRoute isLoggedIn />}>
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/order" element={<OrderPage />} />
               </Route>
               <Route element={<PrivateRoute isAdmin />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
