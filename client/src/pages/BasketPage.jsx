@@ -1,28 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Box, InputLabel, Select, FormControl, MenuItem, Card, CardActions, CardContent, Container, Button, Grid, Typography } from '@mui/material';
-import { getOffers } from '../actions/getOffers';
 import { updateBasket } from '../actions/updateBasket';
 
 function BasketPage() {
-    const [offers, setOffers] = useState([]);
-
     const user = useSelector(state => state.user);
     const basket = useSelector(state => state.basket);
+    const offers = useSelector(state => state.offers.activeOffers);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-  useEffect(() => {
-    const fetchData = async () => {
-        const offersData = await getOffers(true);
-        setOffers(offersData);
-    };
-
-    fetchData();
-  }, []);
 
   const handleQuantityChange = (offerId, quantity) => {
     // Retrieve the current basket data from the cookie
@@ -51,7 +40,7 @@ function BasketPage() {
                 <Grid item xs={12} sm={6} md={7} lg={7}>
                 <Grid container>
                     <Grid item xs>
-                    {Object.keys(basket)?.map((offerId) => {
+                    {offers.length > 0 && Object.keys(basket)?.map((offerId) => {
                         const offer = offers.find((offer) => offer.id.toString() === offerId.toString());
                         return offer && (
                             <Card key={offerId}>

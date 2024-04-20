@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { Box, Typography } from '@mui/material';
 import Navigation from '../Navigation';
 import { getUser } from '../../actions/getUser';
+import { getOffers } from '../../actions/getOffers';
 import { updateBasket } from '../../actions/updateBasket';
 
 const MainLayout = (props) => {
@@ -12,6 +13,7 @@ const MainLayout = (props) => {
 
   useEffect(() => {
     dispatch(getUser());
+    dispatch(getOffers(true));
     const basketData = Cookies.get('basket');
     if (basketData) {
       const parsedBasket = JSON.parse(basketData);

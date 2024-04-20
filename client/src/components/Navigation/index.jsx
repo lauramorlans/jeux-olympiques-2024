@@ -20,8 +20,6 @@ const Navigation = () => {
   const theme = useTheme();
   const basketSize = Object.values(basket).reduce((acc, curr) => acc + curr, 0);
 
-  console.log('basket:', basket)
-
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import {
     Box,
@@ -14,12 +14,12 @@ import {
     MenuItem,
     InputLabel,
 } from '@mui/material';
-import { getOffers } from '../actions/getOffers';
 import { updateBasket } from '../actions/updateBasket';
 
 function TicketsPage() {
-  const [offers, setOffers] = useState([]);
   const [quantities, setQuantities] = useState({});
+
+  const offers = useSelector(state => state.offers.activeOffers);
 
   const dispatch = useDispatch();
 
@@ -30,13 +30,6 @@ function TicketsPage() {
         const parsedBasket = JSON.parse(basketData);
         setQuantities(parsedBasket);
     }
-
-    const fetchData = async () => {
-        const offersData = await getOffers(true);
-        setOffers(offersData);
-    };
-
-    fetchData();
   }, []);
 
   const handleQuantityChange = (offerId, quantity) => {

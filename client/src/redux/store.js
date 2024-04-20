@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import basketReducer from './basketReducer';
+import offersReducer from './offersReducer';
 import userReducer from './userReducer';
 
 const store = configureStore({
   reducer: {
-    user: userReducer,
     basket: basketReducer,
+    offers: offersReducer,
+    user: userReducer,
   },
 });
 

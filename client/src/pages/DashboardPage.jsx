@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { DataGrid } from '@mui/x-data-grid';
 import {
@@ -18,31 +18,29 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import { Edit } from '@mui/icons-material';
-import { getOffers } from '../actions/getOffers';
 import { postOffer } from '../actions/postOffer';
 import { editOffer } from '../actions/editOffer';
+import { getOffers } from '../actions/getOffers';
 
 function DashboardPage() {
   const user = useSelector(state => state.user);
+  const offers = useSelector(state => state.offers.allOffers);
 
-  const [offers, setOffers] = useState([]);
   const [editModal, setEditModal] = useState(false);
   const [createModal, setCreateModal] = useState(false);
 
-  const fetchOffers = async () => {
-    const offersData = await getOffers();
-    setOffers(offersData);
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchOffers();
-  }, []);
+    dispatch(getOffers());
+  }, [dispatch]);
 
   const onHandleClose = () => {
     setCreateModal(false);
     setEditModal(false);
     formikCreate.resetForm();
     formikEdit.resetForm();
+    dispatch(getOffers());
   };
 
   const formikCreate = useFormik({
@@ -71,7 +69,6 @@ function DashboardPage() {
       try {
         await postOffer({ name: values.name, price: values.price, includedtickets: values.includedtickets, active: values.active });
         onHandleClose();
-        fetchOffers(); // Fetch offers again after successful creation
       } catch (err) {
         console.error(err);
       }
@@ -99,7 +96,6 @@ function DashboardPage() {
       try {
         await editOffer({ id: values.id, name: values.name, active: values.active });
         onHandleClose();
-        fetchOffers();
       } catch (err) {
         console.error(err);
       }

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
     Button,
     CardMedia,
@@ -9,7 +10,6 @@ import {
     CardContent,
     Grid,
 } from '@mui/material';
-import { getOffers } from '../actions/getOffers';
 import olympic from '../images/olympic.jpg';
 import horse from '../images/horse.jpg';
 import sprint from '../images/sprint.jpg';
@@ -17,16 +17,8 @@ import pool from '../images/pool.jpg';
 
 function HomePage() {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [offers, setOffers] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const offersData = await getOffers(true);
-      setOffers(offersData);
-    };
-
-    fetchData();
-  }, []);
+  const offers = useSelector(state => state.offers.activeOffers);
 
   const mainEvents = [
     { name: 'Saut d\'obstacles', description: 'L\'épreuve de saut d\'obstacles aux Jeux Olympiques est un spectacle époustouflant de grâce et de force, où cavaliers et chevaux défient des obstacles imposants avec agilité et précision, sous les yeux captivés du public.', image: horse },
