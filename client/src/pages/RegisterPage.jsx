@@ -62,6 +62,11 @@ function RegisterPage() {
     password: Yup
         .string()
         .max(255)
+        .min(7, 'Mot de passe doit contenir 7 caractères minimum')
+        .matches(
+          /^(?=.*[A-Z])(?=.*\d)/,
+          'Mot de passe doit contenir au moins une majuscule et un chiffre'
+        )
         .required('Mot de passe est requis')
     });
 
