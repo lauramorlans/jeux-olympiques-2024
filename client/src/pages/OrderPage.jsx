@@ -19,8 +19,10 @@ function OrderPage() {
   });
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [orderDetails, setOrderDetails] = useState({});
 
   const user = useSelector(state => state.user);
+  const basket = useSelector(state => state.basket);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,8 +40,9 @@ function OrderPage() {
   const onConfirmOrder = async () => {
     setIsLoading(true);
     try {
-      await postOrder(user?.id);
+      const order = await postOrder(user?.id, basket);
       setOrderConfirmed(true);
+      setOrderDetails(order)
       
       // Delete cookie basket
       Cookies.remove('basket');
@@ -68,9 +71,15 @@ function OrderPage() {
                   <Typography variant="div" component="h1" sx={{ marginBottom: 3 }}>
                     Commande confirmée
                   </Typography>
-                  <QRCode
-                    value="test"
-                  />
+                  {orderDetails && orderDetails?.tickets.map((ticket) => {
+                    return (
+                      <Box key={ticket?.id} sx={{ marginBottom: 3 }}>
+                        <QRCode
+                          value={`${ticket?.userid}-${ticket?.orderid}-${ticket?.id}`}
+                        />
+                      </Box>
+                    )
+                  })}
                   <Button
                     fullWidth
                     size="large"

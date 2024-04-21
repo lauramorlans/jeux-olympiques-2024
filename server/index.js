@@ -208,7 +208,7 @@ app.get('/user', async (req, res) => {
 
 app.post('/order', async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId, basket } = req.body;
 
     // Generate a UUID for the order
     const orderId = uuidv4();
@@ -216,10 +216,25 @@ app.post('/order', async (req, res) => {
     const date = new Date();
 
     // Insert the order into the database
-    await db.none('INSERT INTO orders (id, userId, date) VALUES ($1, $2, $3)',
-      [orderId, userId, date]);
+    await db.tx(async t => {
+      // Insert the order
+      await t.none('INSERT INTO orders (id, userid, date) VALUES ($1, $2, $3)', [orderId, userId, date]);
 
-    res.status(201).json({ id: orderId, userId, date });
+      // Insert tickets for each offer in the basket
+      for (const offerId in basket) {
+        const quantity = basket[offerId];
+        // Create a ticket for each quantity
+        for (let i = 0; i < quantity; i++) {
+          const ticketId = uuidv4();
+          await t.none('INSERT INTO tickets (id, orderid, userid, offerid) VALUES ($1, $2, $3, $4)', [ticketId, orderId, userId, offerId]);
+        }
+      }
+    });
+
+    // Fetch the created tickets from the database
+    const createdTickets = await db.manyOrNone('SELECT * FROM tickets WHERE orderid = $1', [orderId]);
+
+    res.status(201).json({ id: orderId, userid: userId, date, tickets: createdTickets });
   } catch (error) {
     console.error('Error processing order:', error);
     res.status(500).json({ error: 'Internal Server Error' });
