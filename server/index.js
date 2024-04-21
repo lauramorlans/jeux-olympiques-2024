@@ -3,6 +3,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
 const pgp = require('pg-promise')();
 const app = express();
 require('dotenv').config();
@@ -57,8 +58,11 @@ app.post('/offer', async (req, res) => {
       return res.status(400).send('Invalid data provided');
     }
 
-    const query = 'INSERT INTO offers (name, price, includedtickets, active) VALUES ($1, $2, $3, $4) RETURNING *';
-    const newOffer = await db.one(query, [name, price, includedtickets, active]);
+    // Generate a UUID for the offer
+    const offerId = uuidv4();
+
+    const query = 'INSERT INTO offers (id, name, price, includedtickets, active) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+    const newOffer = await db.one(query, [offerId, name, price, includedtickets, active]);
     
     res.status(201).json(newOffer);
   } catch (error) {
@@ -171,9 +175,12 @@ app.post('/user', async (req, res) => {
     // Hash the password using bcrypt
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    // Generate a UUID for the user
+    const userId = uuidv4();
+
     // Insert the user into the database
-    await db.none('INSERT INTO users(username, firstname, lastname, email, password) VALUES($1, $2, $3, $4, $5)',
-      [username, firstname, lastname, email, hashedPassword]);
+    await db.none('INSERT INTO users(id, username, firstname, lastname, email, password) VALUES($1, $2, $3, $4, $5, $6)',
+      [userId, username, firstname, lastname, email, hashedPassword]);
     
     res.status(201).send({ status: "success", message: "Utilisateur crée" });
   } catch (error) {
@@ -196,6 +203,26 @@ app.get('/user', async (req, res) => {
   } else {
     // Session not authenticated
     res.status(401).send('Non autorisé');
+  }
+});
+
+app.post('/order', async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    // Generate a UUID for the order
+    const orderId = uuidv4();
+
+    const date = new Date();
+
+    // Insert the order into the database
+    await db.none('INSERT INTO orders (id, userId, date) VALUES ($1, $2, $3)',
+      [orderId, userId, date]);
+
+    res.status(201).json({ id: orderId, userId, date });
+  } catch (error) {
+    console.error('Error processing order:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

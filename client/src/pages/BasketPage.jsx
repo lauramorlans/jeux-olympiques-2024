@@ -63,8 +63,9 @@ function BasketPage() {
                     <Grid item xs>
                     {offers.length > 0 && Object.keys(basket)?.map((offerId) => {
                         const offer = offers.find((offer) => offer.id.toString() === offerId.toString());
+                        const price = offer?.price.toFixed(2);
                         return offer && (
-                            <Card key={offerId}>
+                            <Card key={offerId} sx={{ marginBottom: 3 }}>
                                 <CardContent>
                                     <Typography variant="div" component="h2">
                                         {offer?.name}
@@ -86,10 +87,10 @@ function BasketPage() {
                                                 variant="body1"
                                                 component="div"
                                             >
-                                                Prix unitaire: {offer?.price}€
+                                                Prix unitaire: {price}€
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={2} sx={{ marginTop: 1, marginBottom: 1}}>
+                                        <Grid item xs={3} sx={{ marginTop: 1, marginBottom: 1}}>
                                             <FormControl fullWidth>
                                                 <InputLabel id="quantity">Quantité</InputLabel>
                                                 <Select
@@ -98,7 +99,7 @@ function BasketPage() {
                                                     value={basket[offerId] || ''}
                                                     onChange={(e) => handleQuantityChange(offer?.id, e.target.value)}
                                                 >
-                                                    {Array.from({ length: 10 }, (_, index) => (
+                                                    {Array.from({ length: 5 }, (_, index) => (
                                                         <MenuItem key={index + 1} value={index + 1}>
                                                             {index + 1}
                                                         </MenuItem>
@@ -106,7 +107,7 @@ function BasketPage() {
                                                 </Select>
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={11}>
+                                        <Grid item xs={10}>
                                             <Typography
                                                 variant="body1"
                                                 component="div"
@@ -115,9 +116,9 @@ function BasketPage() {
                                                 Prix total
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={1}>
+                                        <Grid item xs={2}>
                                             <Typography variant="h6" component="div" color="secondary">
-                                                {offer?.price * basket[offerId]}€
+                                                {(price * basket[offerId]).toFixed(2)}€
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -153,14 +154,14 @@ function BasketPage() {
                         </Typography>
                         <hr />
                         <Grid container>
-                            <Grid item xs={11} sm={11} md={11} lg={11}>
+                            <Grid item xs={10}>
                                 <Typography variant="body1" component="div">
                                     Total
                                 </Typography>
                             </Grid>
-                            <Grid item xs={1} sm={1} md={1} lg={1}>
+                            <Grid item xs={2}>
                                 <Typography variant="h6" component="div">
-                                    {calculateTotalPrice()}€
+                                    {calculateTotalPrice().toFixed(2)}€
                                 </Typography>
                             </Grid>
                             {!user?.id && (

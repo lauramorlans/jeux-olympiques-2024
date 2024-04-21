@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 import { Box, Button, Container, Typography, Card, CardContent, TextField, Stack, CircularProgress } from '@mui/material';
 import Cards from 'react-credit-cards-2';
 import QRCode from "react-qr-code";
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { postOrder } from '../actions/postOrder';
+import { updateBasket } from '../actions/updateBasket';
 
 function OrderPage() {
   const [state, setState] = useState({
@@ -16,7 +20,10 @@ function OrderPage() {
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const user = useSelector(state => state.user);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleInputChange = (evt) => {
     const { name, value } = evt.target;
@@ -28,9 +35,18 @@ function OrderPage() {
     setState((prev) => ({ ...prev, focus: evt.target.name }));
   }
 
-  const onConfirmOrder = () => {
+  const onConfirmOrder = async () => {
     setIsLoading(true);
-    setOrderConfirmed(true);
+    try {
+      await postOrder(user?.id);
+      setOrderConfirmed(true);
+      
+      // Delete cookie basket
+      Cookies.remove('basket');
+      dispatch(updateBasket({}));
+    } catch (err) {
+      console.error(err);
+    }
     setIsLoading(false);
   }
 

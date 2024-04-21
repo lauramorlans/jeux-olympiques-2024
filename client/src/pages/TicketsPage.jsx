@@ -66,7 +66,7 @@ function TicketsPage() {
                                         {offer?.name}
                                     </Typography>
                                     <Typography variant="body2" component="p">
-                                        {offer?.price}€ - {offer?.includedtickets} personne{offer?.includedtickets === 1 ? '' : 's'}
+                                        {offer?.price.toFixed(2)}€ - {offer?.includedtickets} personne{offer?.includedtickets === 1 ? '' : 's'}
                                     </Typography>
                                     <FormControl fullWidth sx={{ marginTop: 3 }}>
                                         <InputLabel id="quantity">Nombre de tickets</InputLabel>
@@ -76,7 +76,7 @@ function TicketsPage() {
                                             value={quantities[offer?.id] || 1}
                                             onChange={(e) => handleQuantityChange(offer?.id, e.target.value)}
                                         >
-                                            {Array.from({ length: 10 }, (_, index) => (
+                                            {Array.from({ length: 5 }, (_, index) => (
                                                 <MenuItem key={index + 1} value={index + 1}>
                                                     {index + 1}
                                                 </MenuItem>

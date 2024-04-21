@@ -117,7 +117,7 @@ function DashboardPage() {
       width: 100,
       editable: false,
       renderCell: (row) => {
-        return `${row?.row?.price}€`;
+        return `${row?.row?.price.toFixed(2)}€`;
       },
     },
     {
