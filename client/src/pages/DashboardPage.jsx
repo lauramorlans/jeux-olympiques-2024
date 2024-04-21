@@ -134,9 +134,8 @@ function DashboardPage() {
       width: 200,
     },
     {
-      field: 'sold',
+      field: 'ticket_count',
       headerName: 'Tickets vendus',
-      type: 'number',
       width: 200,
       editable: false,
     },

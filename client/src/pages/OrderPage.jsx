@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import { Box, Button, Container, Typography, Card, CardContent, TextField, Stack, CircularProgress } from '@mui/material';
 import Cards from 'react-credit-cards-2';
-import QRCode from "react-qr-code";
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { postOrder } from '../actions/postOrder';
 import { updateBasket } from '../actions/updateBasket';
+import Ticket from '../components/Ticket';
 
 function OrderPage() {
   const [state, setState] = useState({
@@ -74,9 +74,7 @@ function OrderPage() {
                   {orderDetails && orderDetails?.tickets.map((ticket) => {
                     return (
                       <Box key={ticket?.id} sx={{ marginBottom: 3 }}>
-                        <QRCode
-                          value={`${ticket?.userid}-${ticket?.orderid}-${ticket?.id}`}
-                        />
+                        <Ticket ticket={ticket} />
                       </Box>
                     )
                   })}
@@ -88,7 +86,7 @@ function OrderPage() {
                     variant="contained"
                     onClick={() => navigate('/account')}
                   >
-                    {'Historique d\'achat'}
+                    {'Historique d\'achats'}
                   </Button>
                 </CardContent>
               ) : (

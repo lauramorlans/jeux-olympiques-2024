@@ -34,13 +34,20 @@ app.use(session({
 
 app.get('/offers', async (req, res) => {
   try {
-    let query = 'SELECT * FROM offers';
+    let query = `
+      SELECT offers.*, COUNT(tickets.id) AS ticket_count
+      FROM offers
+      LEFT JOIN tickets ON offers.id = tickets.offerid
+    `;
+    
     const { active } = req.query;
 
     if (active) {
       const isActive = active.toLowerCase() === 'true';
       query += ` WHERE active = ${isActive}`;
     }
+
+    query += ' GROUP BY offers.id';
 
     const offers = await db.any(query);
     res.json(offers);
@@ -238,6 +245,30 @@ app.post('/order', async (req, res) => {
   } catch (error) {
     console.error('Error processing order:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/orders', async (req, res) => {
+  try {
+    const { userId } = req.query;
+
+    if (!userId) {
+      return res.status(400).json({ error: 'userId parameter is required' });
+    }
+
+    // Fetch orders for the given userId
+    const orders = await db.manyOrNone('SELECT * FROM orders WHERE userid = $1', [userId]);
+
+    // Fetch tickets for each order
+    const ordersWithTickets = await Promise.all(orders.map(async (order) => {
+      const tickets = await db.manyOrNone('SELECT * FROM tickets WHERE orderid = $1', [order.id]);
+      return { ...order, tickets };
+    }));
+
+    res.json(ordersWithTickets);
+  } catch (error) {
+    console.error('ERROR:', error);
+    res.status(500).send('Error fetching orders');
   }
 });
 
