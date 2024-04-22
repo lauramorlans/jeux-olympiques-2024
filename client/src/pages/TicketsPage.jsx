@@ -20,6 +20,7 @@ function TicketsPage() {
   const [quantities, setQuantities] = useState({});
 
   const offers = useSelector(state => state.offers.activeOffers);
+  const basket = useSelector(state => state.basket);
 
   const dispatch = useDispatch();
 
@@ -39,9 +40,10 @@ function TicketsPage() {
   const updateQuantityBasket = (offerId) => {
     // update basket with more quantities
     const updatedBasket = {
-        ...quantities,
+        ...basket,
         [offerId]: quantities[offerId] || 1,
     };
+
     // Serialize and store basket data in a cookie
     Cookies.set('basket', JSON.stringify(updatedBasket), { expires: 7 }); // Cookie expires in 7 days
     dispatch(updateBasket(updatedBasket));
