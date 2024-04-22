@@ -8,6 +8,7 @@ const Ticket = (props) => {
     return (
         <QRCode
             value={`${ticket?.userid}-${ticket?.orderid}-${ticket?.id}`}
+            data-testid="qrcode"
         />
     );
 }
