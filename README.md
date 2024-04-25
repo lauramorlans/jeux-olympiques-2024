@@ -28,6 +28,10 @@ Puis pour démarrer les projets:
 ```
 ## Documentation technique
 
+Voici une représentation du MCD.
+
+![MCD](mcd.png)
+
 ### Authentification des Utilisateurs
 Lors de la création de leur compte, les utilisateurs devront fournir leur nom d'utilisateur, nom, prénom, adresse e-mail et mot de passe. Une politique de sécurité des mots de passe est actuellement définie par le développeur de l'application, pour garantir des mots de passe robustes.
 

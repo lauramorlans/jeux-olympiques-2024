@@ -277,3 +277,5 @@ const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", function () {
   console.log(`Server listening on ${port}`);
 });
+
+module.exports = { app, db }
