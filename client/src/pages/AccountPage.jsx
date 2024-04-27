@@ -86,7 +86,7 @@ function AccountPage() {
         <Box sx={{ textAlign: 'center' }}>
           {viewOrder && viewOrder.tickets && Object.keys(viewOrder.tickets).map((ticket) => {
             return (
-              <Box key={ticket?.id} sx={{ marginBottom: 3 }}>
+              <Box key={ticket} sx={{ marginBottom: 3 }}>
                 <Ticket ticket={ticket} />
               </Box>
             )

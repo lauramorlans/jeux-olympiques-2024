@@ -5,13 +5,9 @@ Cette application a été conçu pour un sujet d'examen Studi.
 
 Le projet consiste à mettre en place un système de réservation de billets en ligne pour les Jeux Olympiques de 2024. Les visiteurs devront se rendre sur le site web des Jeux Olympiques France pour consulter les offres disponibles et effectuer leurs réservations. Le système devra permettre aux utilisateurs de créer un compte, sélectionner et acheter des billets, et recevoir un e-billet sécurisé pour accéder aux événements. Il existe également une partie administrateur, afin de modifier les différentes offres proposées aux clients.
 
-
-
-
 ## Demo
 
 [Jeux Olympiques](https://jeux-olympiques-2024-production.up.railway.app/)
-
 
 ## Installation
 
@@ -51,13 +47,13 @@ L'accès à cet espace administrateur sera strictement contrôlé pour garantir 
 
 ### Liste des évolutions futures:
 - envoi d'un code de vérification par e-mail pour approuver la connexion
-- meilleure gestion des offres inactives, comme par exemple si elles sont dans un panier
 - envoyer un mail à la création de compte
 - envoyer un mail de confirmation de réservation, avec en pièces-jointes les tickets
 - télécharger les tickets depuis le compte client
 - gestion de mot de passe oublié
 - changer de mot de passe depuis le compte client
 - changer d'adresse mail depuis le compte client
+
 ## Manuel d'utilisation
 
 ### 1. Accès au Site Web
@@ -66,7 +62,6 @@ Le site comprend, de façon claire :
 
 - Une page d'accueil présentant les Jeux Olympiques et quelques épreuves.
 - Une page répertoriant toutes les offres disponibles, telles que solo, duo et familiale.
-
 
 ### 2. Sélection et Ajout d'Offres au Panier
 
@@ -106,7 +101,6 @@ Pour y accéder, il suffit de se connecter comme n'importe quel autre utilisateu
 
 Par mesure de sécurité, une offre ne peut pas être supprimé, afin de garantir l'accès aux données des tickets déjà achetés. En revanche, il est possible de les rendre inactives. Seules les offres activent apparaissent dans la billeterie.
 
-
 ## Tests unitaires
 
 Pour effectuer les tests unitaires, utilisez la commande suivante pour chaque répertoire. Chacun donnera en résultat le pourcentage de code couvert.
@@ -122,7 +116,6 @@ Pour effectuer les tests unitaires, utilisez la commande suivante pour chaque r�
 **Server:** Node, Express
 
 **Database:** Postgresql
-
 
 ## Pour aller plus loin
 

@@ -1,6 +1,7 @@
 const initialState = {
-    activeOffers: [],
-    allOffers: [],
+  activeOffers: [],
+  allOffers: [],
+  hasRetrievedOffers: false,
 };
 
 export const offersReducer = (state = initialState, action) => {
@@ -9,11 +10,13 @@ export const offersReducer = (state = initialState, action) => {
       return {
         ...state,
         activeOffers: action.payload,
+        hasRetrievedOffers: true,
     };
     case 'SET_ALL_OFFERS':
       return {
         ...state,
         allOffers: action.payload,
+        hasRetrievedOffers: true,
     };
     default:
       return state;

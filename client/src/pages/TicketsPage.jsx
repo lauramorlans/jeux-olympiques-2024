@@ -21,6 +21,7 @@ function TicketsPage() {
 
   const offers = useSelector(state => state.offers.activeOffers);
   const basket = useSelector(state => state.basket);
+  const hasRetrievedOffers = useSelector(state => state.offers.hasRetrievedOffers);
 
   const dispatch = useDispatch();
 
@@ -91,6 +92,11 @@ function TicketsPage() {
                         </Grid>
                     );
                 })}
+                {hasRetrievedOffers && !offers.length && (
+                    <Typography variant="h6" sx={{ textAlign: 'center', marginBottom: 6, marginTop: 6, color: 'white' }}>
+                        Aucune offres disponibles.
+                    </Typography>
+                )}
             </Grid>
         </Container>
     </Box>
