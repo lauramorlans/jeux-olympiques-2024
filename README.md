@@ -109,16 +109,12 @@ Par mesure de sécurité, une offre ne peut pas être supprimé, afin de garanti
 
 ## Tests unitaires
 
-Pour effectuer les tests unitaires, utilisez les commandes suivantes:
+Pour effectuer les tests unitaires, utilisez la commande suivante pour chaque répertoire. Chacun donnera en résultat le pourcentage de code couvert.
 
-### Client:
 ```bash
   npm run test
 ```
-### Serveur:
-{...}
 
-{... covering tests...}
 ## Tech Stack
 
 **Client:** React, Axios, Redux, Material UI
