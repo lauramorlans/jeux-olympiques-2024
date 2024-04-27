@@ -22,7 +22,7 @@ function AccountPage() {
   }, [dispatch, user?.id]);
 
   const columns = [
-    { field: 'number', headerName: 'Order number', width: 200 },
+    { field: 'number', headerName: 'Numéro de commande', width: 250 },
     {
       field: 'tickets',
       headerName: 'Tickets',
