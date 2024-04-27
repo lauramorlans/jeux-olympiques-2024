@@ -48,6 +48,7 @@ app.get('/offers', async (req, res) => {
     }
 
     query += ' GROUP BY offers.id';
+    query += ' ORDER BY offers.price ASC'; // Sort by price ascending
 
     const offers = await db.any(query);
     res.json(offers);

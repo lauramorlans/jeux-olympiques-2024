@@ -41,6 +41,7 @@ function DashboardPage() {
     formikCreate.resetForm();
     formikEdit.resetForm();
     dispatch(getOffers());
+    dispatch(getOffers(true));
   };
 
   const formikCreate = useFormik({
