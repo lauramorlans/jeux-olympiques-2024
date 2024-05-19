@@ -154,6 +154,7 @@ app.get('/logout', function(req, res){
   // destroy the user's session to log them out
   // will be re-created next request
   req.session.destroy();
+  res.clearCookie('connect.sid');
   res.status(200).send({ status: "success", message: 'Déconnecté' });
 });
 
@@ -206,11 +207,10 @@ app.get('/user', async (req, res) => {
       res.json(user);
     } catch (error) {
       console.error('ERROR:', error);
-      res.status(500).send('Error fetching user data');
+      res.status(500).send({ status: "error", message: 'Error fetching user data' });
     }
   } else {
-    // Session not authenticated
-    res.status(401).send('Non autorisé');
+    res.status(200).send({ status: "unauthenticated", message: 'Utilisateur non connecté' });
   }
 });
 
