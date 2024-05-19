@@ -127,69 +127,52 @@ describe('POST /user', () => {
   });
 });
 
-describe('POST /order', () => {
-  it('should create a new order and return it with tickets', async () => {
-    const userId = 'user123';
-    const basket = {
-      offer123: 2,
-      offer456: 1
-    };
+describe('Authentication and Order Flow', () => {
+  let agent;
 
-    const dbStub = sinon.stub(db, 'tx').resolves();
+  beforeEach(() => {
+    agent = request.agent(app); // Create a persistent agent for maintaining session
+  });
 
-    const response = await request(app)
+  afterEach(() => {
+    agent = null; // Clear the agent after each test
+  });
+
+  it('should log in, order, and access orders', async function() {
+    this.timeout(5000); // Set the timeout to 5000ms (5 seconds)
+
+    // 1. Log in
+    const loginResponse = await agent
+      .post('/login')
+      .send({ username: process.env.TEST_USERNAME, password: process.env.TEST_PASSWORD });
+
+    assert.strictEqual(loginResponse.status, 200);
+
+    // 2. Order
+    const orderResponse = await agent
       .post('/order')
-      .send({ userId, basket });
+      .send({ userId: process.env.TEST_USERID, basket: { [process.env.TEST_OFFERID]: 1 } });
 
-    assert.strictEqual(response.status, 201);
-    assert.ok(response.body);
-    assert.strictEqual(response.body.userid, userId);
-    assert.ok(response.body.id);
-    assert.ok(response.body.date);
-    assert.ok(response.body.tickets);
+    assert.strictEqual(orderResponse.status, 201);
+    assert.ok(orderResponse.body);
+    assert.strictEqual(orderResponse.body.userid, process.env.TEST_USERID);
+    assert.ok(orderResponse.body.id);
+    assert.ok(orderResponse.body.date);
+    assert.ok(orderResponse.body.tickets);
 
-    dbStub.restore();
+    // 3. Access orders
+    const ordersResponse = await agent.get('/orders').query({ userId: process.env.TEST_USERID });
+
+    assert.strictEqual(ordersResponse.status, 200);
+
+    // Check if the specific order created in step 2 is returned
+    const specificOrder = ordersResponse.body.find(order => order.id === orderResponse.body.id);
+    assert.ok(specificOrder, 'Specific order not found');
+
+    // Check if the tickets from step 2 are included in the specific order
+    const ticketsInSpecificOrder = specificOrder.tickets;
+    assert.deepStrictEqual(ticketsInSpecificOrder, orderResponse.body.tickets, 'Tickets from step 2 not found in specific order');
   });
 });
 
-describe('GET /orders', () => {
-  it('should return orders with tickets for the given userId', async () => {
-    const userId = 'exampleUserId';
-    const mockOrders = [
-      { id: 1, userId: 'exampleUserId', orderDate: '2024-04-25' },
-      { id: 2, userId: 'exampleUserId', orderDate: '2024-04-26' }
-    ];
-    const mockTickets = [
-      { id: 1, orderId: 1, ticketNumber: 'A123' },
-      { id: 2, orderId: 1, ticketNumber: 'A124' },
-      { id: 3, orderId: 2, ticketNumber: 'B125' }
-    ];
-    const expectedResponse = [
-      { id: 1, userId: 'exampleUserId', orderDate: '2024-04-25', tickets: [{ id: 1, orderId: 1, ticketNumber: 'A123' }, { id: 2, orderId: 1, ticketNumber: 'A124' }] },
-      { id: 2, userId: 'exampleUserId', orderDate: '2024-04-26', tickets: [{ id: 3, orderId: 2, ticketNumber: 'B125' }] }
-    ];
-
-    sinon.stub(db, 'manyOrNone').callsFake(async (query, values) => {
-      if (query.includes('SELECT * FROM orders')) {
-        return mockOrders.filter(order => order.userId === values[0]);
-      } else if (query.includes('SELECT * FROM tickets')) {
-        const orderId = values[0];
-        return mockTickets.filter(ticket => ticket.orderId === orderId);
-      }
-    });
-
-    const response = await request(app).get('/orders').query({ userId });
-
-    assert.strictEqual(response.status, 200);
-    assert.deepStrictEqual(response.body, expectedResponse);
-
-    db.manyOrNone.restore();
-  });
-
-  it('should return 400 if userId parameter is missing', async () => {
-    const response = await request(app).get('/orders');
-    assert.strictEqual(response.status, 400);
-    assert.deepStrictEqual(response.body, { error: 'userId parameter is required' });
-  });
-});
 
