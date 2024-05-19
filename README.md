@@ -109,6 +109,12 @@ Pour effectuer les tests unitaires, utilisez la commande suivante pour chaque rÃ
   npm run test
 ```
 
+### Client
+![Client](test-client.png)
+
+### Server
+![Server](test-server.png)
+
 ## Tech Stack
 
 **Client:** React, Axios, Redux, Material UI

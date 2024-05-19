@@ -5,6 +5,7 @@ describe('Offers Reducer', () => {
     const initialState = {
       activeOffers: [],
       allOffers: [],
+      hasRetrievedOffers: false,
     };
     const newState = offersReducer(undefined, {});
     expect(newState).toEqual(initialState);
@@ -14,6 +15,7 @@ describe('Offers Reducer', () => {
     const initialState = {
       activeOffers: [],
       allOffers: [],
+      hasRetrievedOffers: true,
     };
     const newActiveOffers = [{ name: 'offer1' }, { name: 'offer2' }];
     const action = { type: 'SET_ACTIVE_OFFERS', payload: newActiveOffers };
